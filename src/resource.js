@@ -3,8 +3,9 @@ var res = {
     start_n_png : "res/start_n.png",
     start_s_png : "res/start_s.png",
     PlayBG_png : "res/PlayBG.png",
-    runner_png : "res/running.png",
-    runner_plist : "res/running.plist"
+    testcake_png : "res/TestCake/testcake.png",
+    testcake_plist : "res/TestCake/testcake.plist",
+    oven_png : "res/oven.png"
 };
 
 var g_resources = [
@@ -12,6 +13,7 @@ var g_resources = [
     res.start_n_png,
     res.start_s_png,
     res.PlayBG_png,
-    res.runner_png,
-    res.runner_plist
+    res.testcake_png,
+    res.testcake_plist,
+    res.oven_png
 ];
