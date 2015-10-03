@@ -128,14 +128,14 @@ var TestCakeLayer = cc.Layer.extend({
                 }
             },
             onMouseUp:function(event) {
-                this.selected = false;
+
                 var target = event.getCurrentTarget();
                 var rect = new cc.Rect(target.ovenSprite.getPosition().x - target.ovenSprite.getTextureRect().width / 2,
                     target.ovenSprite.getPosition().y - target.ovenSprite.getTextureRect().height / 2,
                     target.ovenSprite.getTextureRect().width,
                     target.ovenSprite.getTextureRect().height);
                 var point = event.getLocation();
-                if (cc.rectContainsPoint(rect, point)) {
+                if (cc.rectContainsPoint(rect, point) && this.selected) {
                     cc.log("Cake baked!");
                     cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
                     target.updateMoney();
@@ -143,6 +143,7 @@ var TestCakeLayer = cc.Layer.extend({
                     target.resetCake();
                     cc.eventManager.removeListener(this);
                 }
+                this.selected = false;
             }
         }, this);
     },
