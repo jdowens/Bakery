@@ -71,6 +71,13 @@ var TestCakeLayer = cc.Layer.extend({
                         target.setupOpacities();
                         cc.log("Remaining clicks: " + target.remainingClicks);
                         target.curCakeValue += 10;
+                        var sfx_index = Math.floor(Math.random()*3);
+                        if (sfx_index == 0)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
+                        else if (sfx_index == 1)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
+                        else if (sfx_index == 2)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
 
                         // clicks exhausted for current pattern
                         if (target.remainingClicks <= 0) {
@@ -130,6 +137,7 @@ var TestCakeLayer = cc.Layer.extend({
                 var point = event.getLocation();
                 if (cc.rectContainsPoint(rect, point)) {
                     cc.log("Cake baked!");
+                    cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
                     target.updateMoney();
                     target.statusLayer.spawnEarnedText(target.curCakeValue, point);
                     target.resetCake();
