@@ -8,7 +8,7 @@ var MenuLayer = cc.Layer.extend({
         var winsize = cc.director.getWinSize();
         var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
 
-        var spritebg = new cc.Sprite(res.helloBG_png);
+        var spritebg = new cc.Sprite(res.startmenuBG_png);
         spritebg.setPosition(centerpos);
         this.addChild(spritebg);
 

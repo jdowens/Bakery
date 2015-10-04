@@ -18,6 +18,7 @@
         "src/PlayScene.js",
         "src/StatusLayer.js",
         "src/MultiClickPattern.js",
-        "src/TestCakeLayer.js"
+        "src/TestCakeLayer.js",
+        "src/GameOverScene.js"
     ]
 }

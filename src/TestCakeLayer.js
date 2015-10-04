@@ -1,4 +1,5 @@
 var TestCakeLayer = cc.Layer.extend({
+    MAX_CLICKS:5,
     statusLayer:null,
     spriteBatch:null,
     cakeSprite:null,
@@ -9,6 +10,7 @@ var TestCakeLayer = cc.Layer.extend({
     remainingClicks:0,
     money:0,
     curCakeValue:0,
+    remainingTime:0,
 
     ctor:function() {
         this._super();
@@ -21,6 +23,7 @@ var TestCakeLayer = cc.Layer.extend({
         this.initializeClicks();
         this.setupCallbacks();
         this.setupOpacities();
+        this.addToTimer(10.0);
     },
 
     setupGraphics:function() {
@@ -38,19 +41,29 @@ var TestCakeLayer = cc.Layer.extend({
         this.cakeSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.cakeSprite);
 
-        this.patternSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcakepattern1.png"));
-        this.patternSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        this.patternSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
+        //this.patternSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        this.randomizePatternLocation();
         this.spriteBatch.addChild(this.patternSprite);
     },
 
     initializeClicks:function() {
         // setup click count for current region
-        this.requiredClicks = Math.floor((Math.random()*4)+1);
+        this.requiredClicks = Math.floor((Math.random()*this.MAX_CLICKS)+1);
         this.remainingClicks = this.requiredClicks;
     },
 
     setupOpacities:function() {
-        this.patternSprite.setOpacity((this.remainingClicks / this.requiredClicks) * 223 + 32);
+        this.patternSprite.setOpacity((this.remainingClicks / this.MAX_CLICKS) * 223 + 32);
+    },
+
+    addToTimer:function(float) {
+        this.remainingTime += float;
+    },
+
+    randomizePatternLocation:function() {
+        this.patternSprite.attr({x:this.cakeSprite.getPosition().x + ((Math.random() - 0.5)*(this.cakeSprite.getTextureRect().width - this.patternSprite.getTextureRect().width)),
+                                 y:this.cakeSprite.getPosition().y + ((Math.random() - 0.5)*(this.cakeSprite.getTextureRect().height - this.patternSprite.getTextureRect().height))});
     },
 
     setupCallbacks:function() {
@@ -66,6 +79,7 @@ var TestCakeLayer = cc.Layer.extend({
                     var point = event.getLocation();
                     cc.log(rect.x, rect.y, rect.width, rect.height);
                     cc.log(point.x, point.y);
+                    // clicked on pattern
                     if (cc.rectContainsPoint(rect, point)) {
                         target.remainingClicks--;
                         target.setupOpacities();
@@ -87,7 +101,8 @@ var TestCakeLayer = cc.Layer.extend({
                             if (target.currentPattern == 2) {
                                 target.initializeClicks();
                                 target.setupOpacities();
-                                target.patternSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcakepattern2.png"));
+                                target.patternSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
+                                target.randomizePatternLocation();
                                 target.cakeSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcake2.png"));
                             }
                             else if (target.currentPattern == 3) {
@@ -98,6 +113,11 @@ var TestCakeLayer = cc.Layer.extend({
                                 target.currentPattern++;
                             }
                         }
+                    }
+                    // missed the pattern
+                    else {
+                        cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
+                        target.addToTimer(-1.0);
                     }
                 }
             }
@@ -139,6 +159,7 @@ var TestCakeLayer = cc.Layer.extend({
                     cc.log("Cake baked!");
                     cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
                     target.updateMoney();
+                    target.addToTimer(target.curCakeValue / 50);
                     target.statusLayer.spawnEarnedText(target.curCakeValue, point);
                     target.resetCake();
                     cc.eventManager.removeListener(this);
@@ -152,7 +173,7 @@ var TestCakeLayer = cc.Layer.extend({
         this.cakeSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.cakeSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcake1.png"));
 
-        this.patternSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcakepattern1.png"));
+        this.patternSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
         this.patternSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.patternSprite);
 
