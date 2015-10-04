@@ -35,6 +35,7 @@ var MenuScene = cc.Scene.extend({
         var layer = new MenuLayer();
         layer.init();
         this.addChild(layer);
+        cc.audioEngine.playMusic("res/Music/01-overworld-day.mp3", true)
     }
 });
 

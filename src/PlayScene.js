@@ -15,8 +15,6 @@ var PlayScene = cc.Scene.extend({
         this.addChild(this.backgroundLayer);
         this.addChild(this.actionLayer);
         this.addChild(this.statusLayer);
-
-        cc.audioEngine.playMusic("res/Music/01-overworld-day.mp3", true)
     },
 
     update:function(dt) {
