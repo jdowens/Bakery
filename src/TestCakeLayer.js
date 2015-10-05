@@ -21,7 +21,10 @@ var TestCakeLayer = cc.Layer.extend({
         this._super();
         this.setupGraphics();
         this.initializeClicks();
-        this.setupCallbacks();
+        if ('touches' in cc.sys.capabilities)
+            this.setupTouchCallbacks();
+        else if ('mouse' in cc.sys.capabilities)
+            this.setupMouseCallbacks();
         this.setupOpacities();
         this.addToTimer(10.0);
     },
@@ -66,7 +69,7 @@ var TestCakeLayer = cc.Layer.extend({
                                  y:this.cakeSprite.getPosition().y + ((Math.random() - 0.5)*(this.cakeSprite.getTextureRect().height - this.patternSprite.getTextureRect().height))});
     },
 
-    setupCallbacks:function() {
+    setupMouseCallbacks:function() {
         cc.eventManager.addListener({
             event: cc.EventListener.MOUSE,
             onMouseUp:function(event) {
@@ -109,7 +112,7 @@ var TestCakeLayer = cc.Layer.extend({
                                 target.spriteBatch.removeChild(target.patternSprite);
                                 delete target.patternSprite;
                                 target.cakeSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcake3.png"));
-                                target.setupDragCallback();
+                                target.setupMouseDragCallback();
                                 target.currentPattern++;
                             }
                         }
@@ -124,7 +127,7 @@ var TestCakeLayer = cc.Layer.extend({
         }, this);
     },
 
-    setupDragCallback:function() {
+    setupMouseDragCallback:function() {
         cc.eventManager.addListener({
             event: cc.EventListener.MOUSE,
             selected:false,
@@ -155,6 +158,110 @@ var TestCakeLayer = cc.Layer.extend({
                     target.ovenSprite.getTextureRect().width,
                     target.ovenSprite.getTextureRect().height);
                 var point = event.getLocation();
+                if (cc.rectContainsPoint(rect, point) && this.selected) {
+                    cc.log("Cake baked!");
+                    cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
+                    target.updateMoney();
+                    target.addToTimer(target.curCakeValue / 50);
+                    target.statusLayer.spawnEarnedText(target.curCakeValue, point);
+                    target.resetCake();
+                    cc.eventManager.removeListener(this);
+                }
+                this.selected = false;
+            }
+        }, this);
+    },
+
+    setupTouchCallbacks:function() {
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches:false,
+            onTouchEnded:function(touch, event) {
+                var target = event.getCurrentTarget();
+                if (target.currentPattern <= 2) {
+                    var rect = new cc.Rect(target.patternSprite.getPosition().x - target.patternSprite.getTextureRect().width / 2,
+                        target.patternSprite.getPosition().y - target.patternSprite.getTextureRect().height / 2,
+                        target.patternSprite.getTextureRect().width,
+                        target.patternSprite.getTextureRect().height);
+                    var point = touch.getLocation();
+                    cc.log(rect.x, rect.y, rect.width, rect.height);
+                    cc.log(point.x, point.y);
+                    // clicked on pattern
+                    if (cc.rectContainsPoint(rect, point)) {
+                        target.remainingClicks--;
+                        target.setupOpacities();
+                        cc.log("Remaining clicks: " + target.remainingClicks);
+                        target.curCakeValue += 10;
+                        var sfx_index = Math.floor(Math.random()*3);
+                        if (sfx_index == 0)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
+                        else if (sfx_index == 1)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
+                        else if (sfx_index == 2)
+                            cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
+
+                        // clicks exhausted for current pattern
+                        if (target.remainingClicks <= 0) {
+                            target.remainingClicks = 0;
+
+                            target.currentPattern++;
+                            if (target.currentPattern == 2) {
+                                target.initializeClicks();
+                                target.setupOpacities();
+                                target.patternSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
+                                target.randomizePatternLocation();
+                                target.cakeSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcake2.png"));
+                            }
+                            else if (target.currentPattern == 3) {
+                                target.spriteBatch.removeChild(target.patternSprite);
+                                delete target.patternSprite;
+                                target.cakeSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame("testcake3.png"));
+                                target.setupTouchDragCallback();
+                                target.currentPattern++;
+                            }
+                        }
+                    }
+                    // missed the pattern
+                    else {
+                        cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
+                        target.addToTimer(-1.0);
+                    }
+                }
+            }
+        }, this);
+    },
+
+    setupTouchDragCallback:function() {
+        cc.eventManager.addListener({
+            event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            selected:false,
+            onTouchBegan:function(touch, event) {
+                var target = event.getCurrentTarget();
+                var rect = new cc.Rect(target.cakeSprite.getPosition().x - target.cakeSprite.getTextureRect().width / 2,
+                    target.cakeSprite.getPosition().y - target.cakeSprite.getTextureRect().height / 2,
+                    target.cakeSprite.getTextureRect().width,
+                    target.cakeSprite.getTextureRect().height);
+                var point = touch.getLocation();
+                if (cc.rectContainsPoint(rect, point)) {
+                    cc.log("Clicked inside cake sprite!");
+                    this.selected = true;
+                }
+            },
+            onTouchMoved:function(touch, event) {
+                var target = event.getCurrentTarget();
+                if (this.selected) {
+                    target.cakeSprite.x = touch.getLocation().x;
+                    target.cakeSprite.y = touch.getLocation().y;
+                }
+            },
+            onTouchEnded:function(touch, event) {
+
+                var target = event.getCurrentTarget();
+                var rect = new cc.Rect(target.ovenSprite.getPosition().x - target.ovenSprite.getTextureRect().width / 2,
+                    target.ovenSprite.getPosition().y - target.ovenSprite.getTextureRect().height / 2,
+                    target.ovenSprite.getTextureRect().width,
+                    target.ovenSprite.getTextureRect().height);
+                var point = touch.getLocation();
                 if (cc.rectContainsPoint(rect, point) && this.selected) {
                     cc.log("Cake baked!");
                     cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
