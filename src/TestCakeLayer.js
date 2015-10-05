@@ -21,10 +21,12 @@ var TestCakeLayer = cc.Layer.extend({
         this._super();
         this.setupGraphics();
         this.initializeClicks();
-        //if ('touches' in cc.sys.capabilities)
+        if ('touches' in cc.sys.capabilities) {
             this.setupTouchCallbacks();
-        //else if ('mouse' in cc.sys.capabilities)
+        }
+        else if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
+        }
         this.setupOpacities();
         this.addToTimer(10.0);
     },
@@ -175,8 +177,8 @@ var TestCakeLayer = cc.Layer.extend({
     setupTouchCallbacks:function() {
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches:false,
-            onTouchEnded:function(touch, event) {
+            swallowTouches:true,
+            onTouchBegan:function(touch, event) {
                 var target = event.getCurrentTarget();
                 if (target.currentPattern <= 2) {
                     var rect = new cc.Rect(target.patternSprite.getPosition().x - target.patternSprite.getTextureRect().width / 2,
@@ -227,6 +229,7 @@ var TestCakeLayer = cc.Layer.extend({
                         target.addToTimer(-1.0);
                     }
                 }
+                return false;
             }
         }, this);
     },
@@ -234,6 +237,7 @@ var TestCakeLayer = cc.Layer.extend({
     setupTouchDragCallback:function() {
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches:true,
             selected:false,
             onTouchBegan:function(touch, event) {
                 var target = event.getCurrentTarget();
@@ -246,6 +250,7 @@ var TestCakeLayer = cc.Layer.extend({
                     cc.log("Clicked inside cake sprite!");
                     this.selected = true;
                 }
+                return true;
             },
             onTouchMoved:function(touch, event) {
                 var target = event.getCurrentTarget();
