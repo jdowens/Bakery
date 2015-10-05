@@ -21,9 +21,9 @@ var TestCakeLayer = cc.Layer.extend({
         this._super();
         this.setupGraphics();
         this.initializeClicks();
-        if ('touches' in cc.sys.capabilities)
+        //if ('touches' in cc.sys.capabilities)
             this.setupTouchCallbacks();
-        else if ('mouse' in cc.sys.capabilities)
+        //else if ('mouse' in cc.sys.capabilities)
             this.setupMouseCallbacks();
         this.setupOpacities();
         this.addToTimer(10.0);
