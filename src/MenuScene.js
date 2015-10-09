@@ -2,6 +2,8 @@
  * Created by james on 10/8/2015.
  */
 var MenuLayer = cc.Layer.extend({
+    spriteOven:null,
+
     ctor:function() {
         this._super();
     },
@@ -25,6 +27,43 @@ var MenuLayer = cc.Layer.extend({
         var menu = new cc.Menu(menuItemPlay);
         menu.setPosition(centerpos);
         this.addChild(menu);
+
+        this.spriteOven = new cc.Sprite(res.oven_png);
+        this.spriteOven.setPosition(centerpos);
+        this.addChild(this.spriteOven);
+
+        var eventListener = {
+            event: cc.EventListener.MOUSE,
+            selected:false,
+
+            onMouseDown:function(event) {
+                var target = event.getCurrentTarget();
+
+                var rect = new cc.Rect(target.spriteOven.getPosition().x - target.spriteOven.getTextureRect().width / 2,
+                                       target.spriteOven.getPosition().y - target.spriteOven.getTextureRect().height / 2,
+                                       target.spriteOven.getTextureRect().width,
+                                       target.spriteOven.getTextureRect().height);
+                var point = event.getLocation();
+                if (cc.rectContainsPoint(rect, point)) {
+                    cc.log("You clicked the sprite!");
+                    this.selected = true;
+                }
+            },
+
+            onMouseMove:function(event) {
+                var target = event.getCurrentTarget();
+                if (this.selected) {
+                    target.spriteOven.x = event.getLocation().x;
+                    target.spriteOven.y = event.getLocation().y;
+                }
+            },
+
+            onMouseUp:function(event) {
+                this.selected = false;
+            }
+        };
+
+        cc.eventManager.addListener(eventListener, this);
     },
 
     onPlay:function() {
@@ -43,40 +82,6 @@ var MenuScene = cc.Scene.extend({
         this.addChild(layer);
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 var ImCoolFunc = function(whoscool) {
     cc.log(whoscool + " is cool!");
