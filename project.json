@@ -11,6 +11,7 @@
     "modules" : ["cocos2d"],
 
     "jsList" : [
-        "src/resource.js"
+        "src/resource.js",
+        "src/MenuScene.js"
     ]
 }
