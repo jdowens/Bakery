@@ -12,7 +12,7 @@ var PlayScene = cc.Scene.extend({
         this.statusLayer = new StatusLayer();
 
         this.actionLayer.setStatusLayer(this.statusLayer);
-        this.actionLayer.addToTimer(10);
+        this.actionLayer.addToTimer(20);
         this.addChild(this.backgroundLayer);
         this.addChild(this.actionLayer);
         this.addChild(this.statusLayer);

@@ -7,6 +7,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     currentPattern:null,
     patternQueue:[],
     statusLayer:null,
+    foodQueue:[],
 
     ctor:function() {
         this._super();
@@ -16,17 +17,20 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     init:function() {
         this._super();
         this.scheduleUpdate();
-        this.setupGraphics();
         this.setupTestQueue();
+        this.setupGraphics();
         this.nextPattern();
     },
 
     setupTestQueue:function() {
-        for (var i = 0; i < 2; i++) {
-            this.patternQueue.push(new MultiClickPatternLayer(true, true, res.testcakepattern3_png, 0, cc.p(0, 0)));
-            this.patternQueue.push(new ClickAndHoldPatternLayer(true, true, 100, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
+        for (var i = 0; i < 4; i++) {
+            this.patternQueue.push(new MultiClickPatternLayer(true, true, false, res.testcakepattern3_png, 0, cc.p(0, 0)));
         }
-        this.patternQueue.push(new DragAndDropPatternLayer(this.foodSprite, this.ovenSprite));
+        this.patternQueue.push(new MultiClickPatternLayer(true, true, true, res.testcakepattern3_png, 0, cc.p(0, 0)));
+        this.patternQueue.push(new ClickAndHoldPatternLayer(false, false, true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 2.0, cc.p(0, 0)));
+        this.foodQueue.push("testcake1.png");
+        this.foodQueue.push("testcake2.png");
+        this.foodQueue.push("testcake3.png");
     },
 
     nextPattern:function() {
@@ -51,13 +55,15 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.spriteBatch = new cc.SpriteBatchNode(res.testcake_png);
         this.addChild(this.spriteBatch);
 
-        this.foodSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcake1.png"));
+        this.foodSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame(this.foodQueue.shift()));
         this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.foodSprite);
     },
 
     update:function(dt) {
         if (this.currentPattern != null && this.currentPattern.isFinished()) {
+            if (this.currentPattern.advancesFood)
+                this.advanceFood();
             this.currentPattern.onFinish();
             cc.log(this.curCakeValue);
             this.removeChild(this.currentPattern);
@@ -74,6 +80,22 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.statusLayer = layer;
     },
 
+    advanceFood:function() {
+        if (this.foodQueue.length > 1) {
+            var frame = this.foodQueue.shift();
+            this.foodSprite.setSpriteFrame(frame);
+        }
+        else if (this.foodQueue.length == 1){
+            var frame = this.foodQueue.shift();
+            this.foodSprite.setSpriteFrame(frame);
+            this.patternQueue.push(new DragAndDropPatternLayer(this.foodSprite, this.ovenSprite));
+        }
+    },
+
+    resetGraphics:function() {
+        this.foodSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame(this.foodQueue.shift()));
+    },
+
     onFinish:function() {
         this.statusLayer.spawnEarnedText(this.curCakeValue, this.ovenSprite.getPosition());
         this.addToTimer(this.curCakeValue/50);
@@ -81,6 +103,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.curCakeValue = 0;
         this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.setupTestQueue();
+        this.resetGraphics();
         this.nextPattern();
     }
 });
@@ -107,11 +130,13 @@ var MultiClickPatternLayer = cc.Layer.extend({
     finished:false,
     clickAndDragSelected:false,
     listener:null,
+    advancesFood:false,
 
-    ctor:function(clickCountRandom, patternPositionRandom, patternSpriteResource, requiredClicks, offsetFromFood) {
+    ctor:function(clickCountRandom, patternPositionRandom, advancesFood, patternSpriteResource, requiredClicks, offsetFromFood) {
         this._super();
         this.clickCountRandom = clickCountRandom;
         this.patternPositionRandom = patternPositionRandom;
+        this.advancesFood = advancesFood;
         this.requiredClicks = requiredClicks;
         this.remainingClicks = requiredClicks;
         this.offsetFromFood = offsetFromFood;
@@ -236,12 +261,14 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
     actionLayer:null,
     finished:false,
     listener:null,
+    advancesFood:false,
 
-    ctor:function(holdTimeRandom, positionRandom, max_gold, patternSpriteResource,
+    ctor:function(holdTimeRandom, positionRandom, advancesFood, max_gold, patternSpriteResource,
     patternOutlineSpriteResource, requiredHoldTime, offsetFromFood) {
         this._super();
         this.holdTimeRandom = holdTimeRandom;
         this.patternPositionRandom = positionRandom;
+        this.advancesFood = advancesFood;
         this.max_gold = max_gold;
         this.requiredHoldTime = requiredHoldTime;
         this.remainingHoldTime = requiredHoldTime;
