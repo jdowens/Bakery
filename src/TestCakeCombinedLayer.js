@@ -22,8 +22,10 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     },
 
     setupTestQueue:function() {
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern1_png, 1, cc.p(0,0)));
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern1_png, 3, cc.p(10,10)));
+        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern3_png, 1, cc.p(0,0)));
+        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern3_png, 3, cc.p(10,10)));
+        for (i = 0; i < 3; i++)
+            this.patternQueue.push(new MultiClickPatternLayer(true, true, res.testcakepattern3_png, 0, cc.p(0,0)));
     },
 
     nextPattern:function() {
@@ -199,5 +201,13 @@ var MultiClickPatternLayer = cc.Layer.extend({
 });
 
 var ClickAndHoldPatternLayer = cc.Layer.extend({
-
+    MAX_HOLD_DURATION:0.5,
+    MIN_HOLD_DURATION:0.25,
+    SECONDS_PER_GOLD:0.001,
+    MAX_GOLD:100,
+    patternSprite:null,
+    patternOutlineSprite:null,
+    requiredHoldTime:0,
+    remainingHoldTime:0,
+    selected:false
 });
