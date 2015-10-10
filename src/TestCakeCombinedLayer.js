@@ -22,10 +22,11 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     },
 
     setupTestQueue:function() {
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 2; i++) {
             this.patternQueue.push(new MultiClickPatternLayer(true, true, res.testcakepattern3_png, 0, cc.p(0, 0)));
             this.patternQueue.push(new ClickAndHoldPatternLayer(true, true, 100, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
         }
+        this.patternQueue.push(new DragAndDropPatternLayer(this.foodSprite, this.ovenSprite));
     },
 
     nextPattern:function() {
@@ -33,6 +34,9 @@ var TestCakeCombinedLayer = cc.Layer.extend({
             this.currentPattern = this.patternQueue.shift();
             this.addChild(this.currentPattern);
             this.currentPattern.onStart(this);
+        }
+        else {
+            this.onFinish();
         }
     },
 
@@ -68,6 +72,16 @@ var TestCakeCombinedLayer = cc.Layer.extend({
 
     setStatusLayer:function(layer) {
         this.statusLayer = layer;
+    },
+
+    onFinish:function() {
+        this.statusLayer.spawnEarnedText(this.curCakeValue, this.ovenSprite.getPosition());
+        this.addToTimer(this.curCakeValue/50);
+        this.money += this.curCakeValue;
+        this.curCakeValue = 0;
+        this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        this.setupTestQueue();
+        this.nextPattern();
     }
 });
 
@@ -131,9 +145,14 @@ var MultiClickPatternLayer = cc.Layer.extend({
         }
     },
 
+    setupPatternSpriteOpacities:function() {
+        this.patternSprite.setOpacity((this.remainingClicks / this.MAX_CLICKS) * 223 + 32);
+    },
+
     onStart:function(layer) {
         this.actionLayer = layer;
         this.setupPatternSpritePosition();
+        this.setupPatternSpriteOpacities();
         if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
         }
@@ -177,6 +196,7 @@ var MultiClickPatternLayer = cc.Layer.extend({
         var rect = this.patternSprite.getBoundingBoxToWorld();
         if (cc.rectContainsPoint(rect, point)) {
             this.remainingClicks--;
+            this.setupPatternSpriteOpacities();
             if (this.remainingClicks == 0) {
                 this.finished = true;
             }
@@ -201,7 +221,7 @@ var MultiClickPatternLayer = cc.Layer.extend({
 });
 
 var ClickAndHoldPatternLayer = cc.Layer.extend({
-    MAX_HOLD_DURATION:2.0,
+    MAX_HOLD_DURATION:0.5,
     MIN_HOLD_DURATION:0.25,
     SECONDS_PER_GOLD:0.001,
     max_gold:0,
@@ -354,6 +374,98 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
     }
 });
 
-DragAndDropPatternLayer:cc.Layer.extend({
+var DragAndDropPatternLayer = cc.Layer.extend({
+    spriteTarget:null,
+    spriteDestination:null,
+    listener:null,
+    finished:false,
+    actionLayer:null,
+    selected:false,
+
+    ctor:function(spriteTarget, spriteDestination) {
+        this._super();
+        this.spriteTarget = spriteTarget;
+        this.spriteDestination = spriteDestination;
+    },
+
+    onStart:function(layer) {
+        this.actionLayer = layer;
+        if ('mouse' in cc.sys.capabilities) {
+            this.setupMouseCallbacks();
+        }
+        else if ('touches' in cc.sys.capabilities) {
+            this.setupTouchCallbacks();
+        }
+    },
+
+    setupMouseCallbacks:function() {
+        this.listener = cc.EventListener.create({
+            event:cc.EventListener.MOUSE,
+            onMouseDown:function(event) {
+                var target = event.getCurrentTarget();
+                target.onDragBegin(event.getLocation());
+            },
+            onMouseMove:function(event) {
+                var target = event.getCurrentTarget();
+                target.onDrag(event.getLocation());
+            },
+            onMouseUp:function(event) {
+                var target = event.getCurrentTarget();
+                target.onDragEnd(event.getLocation());
+            }
+        });
+
+        cc.eventManager.addListener(this.listener, this);
+    },
+
+    setupTouchCallbacks:function() {
+        this.listener = cc.EventListener.create({
+            event:cc.EventListener.TOUCH_ONE_BY_ONE,
+            swallowTouches:false,
+            onTouchBegan:function(touch, event) {
+                var target = event.getCurrentTarget();
+                target.onDragBegin(touch.getLocation());
+                return true;
+            },
+            onTouchMoved:function(touch, event) {
+                var target = event.getCurrentTarget();
+                target.onDrag(touch.getLocation());
+            },
+            onTouchEnded:function(tourch, event) {
+                var target = event.getCurrentTarget();
+                target.onDragEnd(touch.getLocation());
+            }
+        });
+    },
+
+    onDragBegin:function(pos) {
+        var rect = this.spriteTarget.getBoundingBoxToWorld();
+        if (cc.rectContainsPoint(rect, pos)) {
+            this.selected = true;
+        }
+    },
+
+    onDrag:function(pos) {
+        if (this.selected) {
+            this.spriteTarget.x = pos.x;
+            this.spriteTarget.y = pos.y;
+        }
+    },
+
+    onDragEnd:function(pos) {
+        var rect = this.spriteDestination.getBoundingBoxToWorld();
+        if (cc.rectContainsPoint(rect, pos)) {
+            cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
+            this.finished = true;
+        }
+    },
+
+    onFinish:function() {
+        cc.eventManager.removeListener(this.listener);
+    },
+
+    isFinished:function() {
+        return this.finished;
+    }
 
 });
