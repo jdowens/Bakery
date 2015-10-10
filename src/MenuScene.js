@@ -59,5 +59,9 @@ var MenuScene = cc.Scene.extend({
         layer.init();
         // add the layer to the Scene to allow it to be drawn
         this.addChild(layer);
+        // play some sweet tunes
+        cc.audioEngine.playMusic("res/Music/01-overworld-day.mp3", true);
+        cc.audioEngine.setEffectsVolume(0.25);
+        cc.audioEngine.setMusicVolume(0.2);
     }
 });

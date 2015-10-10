@@ -47,6 +47,7 @@ var TestClickAndHoldLayer = cc.Layer.extend({
         }
         else if (this.remainingHoldTime < this.requiredHoldTime && this.currentPattern <= 2) {
             if (!this.selected) {
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
                 this.curCakeValue += this.MAXIMUM_GOLD -
                     Math.floor(Math.abs(this.remainingHoldTime) / this.DELTA_TIME_PER_GOLD);
                 this.remainingHoldTime = 0;
