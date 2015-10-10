@@ -95,6 +95,7 @@ var MenuLayer2 = cc.Layer.extend({
 
     onMenuExit:function() {
         cc.log("You clicked the exit button, good job...");
+        window.location.replace("http://dropthenet.com/index.php/cute-bakery/");
     }
 });
 
@@ -105,7 +106,7 @@ var MenuScene2 = cc.Scene.extend({
         layer.init();
         this.addChild(layer);
 
-        cc.audioEngine.playMusic("res/Music/01-overworld-day.mp3", true);
+        cc.audioEngine.playMusic("res/Music/Engineering.mp3", true);
     }
 });
 
