@@ -11,7 +11,10 @@ var res = {
     testcakepattern1_png : "res/TestCake/testcakepattern1.png",
     testcakepattern2_png : "res/TestCake/testcakepattern2.png",
     testcakepattern3_png : "res/TestCake/testcakepattern3.png",
-    testcakepattern4_png : "res/TestCake/testcakepattern4.png"
+    testcakepattern4_png : "res/TestCake/testcakepattern4.png",
+    red_button10_png : "res/UI/red_button10.png",
+    red_button13_png : "res/UI/red_button13.png",
+    red_sliderDown_png : "res/UI/red_sliderDown.png"
 };
 
 var g_resources = [
@@ -27,5 +30,8 @@ var g_resources = [
     res.testcakepattern1_png,
     res.testcakepattern2_png,
     res.testcakepattern3_png,
-    res.testcakepattern4_png
+    res.testcakepattern4_png,
+    res.red_button10_png,
+    res.red_button13_png,
+    res.red_sliderDown_png
 ];

@@ -36,11 +36,46 @@ var OptionsLayer = cc.Layer.extend({
         menu.setPosition(cc.p(centerpos.x, centerpos.y - 200));
         // add menu to layer
         this.addChild(menu);
+
+        // create music volume slider
+        var slider = new cc.ControlSlider(res.red_button10_png, res.red_button13_png, res.red_sliderDown_png);
+        slider.setPosition(cc.p(centerpos.x, centerpos.y + 25));
+        slider.setEnabled(true);
+        slider.setMinimumAllowedValue(0);
+        slider.setMaximumValue(1);
+        slider.setValue(1);
+        slider.addTargetWithActionForControlEvents(this, this.onMusicValueChanged, cc.CONTROL_EVENT_VALUECHANGED);
+        this.addChild(slider);
+        var text = new cc.LabelTTF("Music: ", "Helvetica", 30);
+        text.setPosition(cc.p(centerpos.x - 150, centerpos.y + 25));
+        this.addChild(text);
+
+        // create sfx volume slider
+        var slider2 = new cc.ControlSlider(res.red_button10_png, res.red_button13_png, res.red_sliderDown_png);
+        slider2.setPosition(cc.p(centerpos.x, centerpos.y - 25));
+        slider2.setEnabled(true);
+        slider2.setMinimumAllowedValue(0);
+        slider2.setMaximumValue(1);
+        slider2.setValue(1);
+        slider2.addTargetWithActionForControlEvents(this, this.onSFXValueChanged, cc.CONTROL_EVENT_VALUECHANGED);
+        this.addChild(slider2);
+        var text2 = new cc.LabelTTF("SFX: ", "Helvetica", 30);
+        text2.setPosition(cc.p(centerpos.x - 150, centerpos.y - 25));
+        this.addChild(text2);
     },
 
     // callback for the play button
     onPlay:function() {
         cc.director.runScene(new MenuScene2());
+    },
+
+    onMusicValueChanged:function(event) {
+        cc.audioEngine.setMusicVolume(event.value);
+    },
+
+    onSFXValueChanged:function(event) {
+        cc.audioEngine.setEffectsVolume(event.value);
+        cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
     }
 });
 
@@ -58,3 +93,4 @@ var OptionsScene = cc.Scene.extend({
         this.addChild(layer);
     }
 });
+

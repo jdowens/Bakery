@@ -105,8 +105,6 @@ var MenuScene2 = cc.Scene.extend({
         this.addChild(layer);
 
         cc.audioEngine.playMusic("res/Music/01-overworld-day.mp3", true);
-        cc.audioEngine.setEffectsVolume(0.25);
-        cc.audioEngine.setMusicVolume(0.2);
     }
 });
 
