@@ -18,20 +18,26 @@ var PlayScene = cc.Scene.extend({
         this.addChild(this.statusLayer);
     },
 
+    onExit:function() {
+        this.removeAllChildrenWithCleanup();
+    },
+
     update:function(dt) {
-        if (this.actionLayer !== null)
+        /*if (this.actionLayer !== null)
         {
             this.actionLayer.addToTimer(-dt);
         }
         if (this.actionLayer !== null && this.actionLayer.remainingTime <= 0)
         {
-            /*this.actionLayer.remainingTime = 0.0;
-            this.statusLayer.updateText(this.actionLayer);
-            this.removeChild(this.actionLayer);
-            delete this.actionLayer;*/
+            //this.actionLayer.remainingTime = 0.0;
+            //this.statusLayer.updateText(this.actionLayer);
+            //this.removeChild(this.actionLayer);
+            //delete this.actionLayer;
             cc.director.runScene(new GameOverScene(this.actionLayer.money));
-        }
-        else if (this.actionLayer !== null)
+        }*/
+        if (this.actionLayer !== null)
             this.statusLayer.updateText(this.actionLayer);
+        if (this.actionLayer.gameOver)
+            cc.director.runScene(new GameOverScene(this.actionLayer.money));
     }
 });

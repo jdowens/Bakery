@@ -8,6 +8,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     patternQueue:[],
     statusLayer:null,
     foodQueue:[],
+    gameOver:false,
 
     ctor:function() {
         this._super();
@@ -61,6 +62,9 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     },
 
     update:function(dt) {
+        this.addToTimer(-dt);
+        if(this.remainingTime < 0)
+            this.onTimeUp();
         if (this.currentPattern != null && this.currentPattern.isFinished()) {
             if (this.currentPattern.advancesFood)
                 this.advanceFood();
@@ -105,6 +109,18 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.setupTestQueue();
         this.resetGraphics();
         this.nextPattern();
+    },
+
+    onTimeUp:function() {
+        while (this.patternQueue.length > 0) {
+            var cur = this.patternQueue.shift();
+            delete cur;
+        }
+        while (this.foodQueue.length > 0) {
+            var cur = this.foodQueue.shift();
+            delete cur;
+        }
+        this.gameOver = true;
     }
 });
 
