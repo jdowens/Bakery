@@ -392,8 +392,11 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
 
     onFinish:function() {
         cc.eventManager.removeListener(this.listener);
-        this.actionLayer.curCakeValue += this.max_gold -
+        var value = this.max_gold -
             Math.floor(Math.abs(this.remainingHoldTime) / this.SECONDS_PER_GOLD);
+        if (value < 0)
+            value = 0;
+        this.actionLayer.curCakeValue += value;
     },
 
     isFinished:function() {
