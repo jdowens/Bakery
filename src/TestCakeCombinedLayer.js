@@ -118,7 +118,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
 Pattern.extend = cc.Class.extend;*/
 
 var MultiClickPatternLayer = cc.Layer.extend({
-    MAX_CLICKS:5,
+    MAX_CLICKS:2,
     clickCountRandom:false,
     patternPositionRandom:false,
     patternSprite:null,
