@@ -107,7 +107,7 @@ var MenuScene2 = cc.Scene.extend({
         layer.init();
         this.addChild(layer);
 
-        cc.audioEngine.playMusic("res/Music/Engineering.mp3", true);
+
     }
 });
 
