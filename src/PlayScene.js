@@ -7,7 +7,7 @@ var PlayScene = cc.Scene.extend({
         this._super();
         this.scheduleUpdate();
         this.backgroundLayer = new BackgroundLayer();
-        this.actionLayer = new TestCakeLayer();
+        this.actionLayer = new TestClickAndHoldLayer();
         this.statusLayer = new StatusLayer();
 
         this.actionLayer.setStatusLayer(this.statusLayer);

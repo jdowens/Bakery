@@ -72,7 +72,20 @@
             <key>testcakepattern3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{456,68},{32,32}}</string>
+                <string>{{458,2},{32,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{32,32}}</string>
+                <key>sourceSize</key>
+                <string>{32,32}</string>
+            </dict>
+            <key>testcakepattern4.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{458,36},{32,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -90,9 +103,9 @@
             <key>realTextureFileName</key>
             <string>testcake.png</string>
             <key>size</key>
-            <string>{490,132}</string>
+            <string>{492,132}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a24fdda0b4dd6a9d41365362e23c465c:abdd1279cba15c3393f24d448ddd79b1:49c6bca40b37be2fd613f5296bde4b20$</string>
+            <string>$TexturePacker:SmartUpdate:f59f1167169ff05be1135d96b2a1d665:160a8f6cdb04d994053db99a2ef6beca:49c6bca40b37be2fd613f5296bde4b20$</string>
             <key>textureFileName</key>
             <string>testcake.png</string>
         </dict>

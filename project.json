@@ -17,6 +17,7 @@
         "src/GameOverScene.js",
         "src/PlayScene.js",
         "src/StatusLayer.js",
-        "src/TestCakeLayer.js"
+        "src/TestCakeLayer.js",
+        "src/TestClickAndHoldLayer.js"
     ]
 }

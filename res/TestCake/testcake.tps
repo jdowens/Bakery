@@ -196,6 +196,7 @@
             <filename>testcakepattern1.png</filename>
             <filename>testcakepattern2.png</filename>
             <filename>testcakepattern3.png</filename>
+            <filename>testcakepattern4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
