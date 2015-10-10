@@ -29,7 +29,7 @@ var GameOverLayer = cc.Layer.extend({
 
     onPlay : function() {
         cc.log("==onRestart clicked");
-        cc.director.runScene(new PlayScene());
+        cc.director.runScene(new MenuScene2());
     },
 
     setupLabel:function(money) {
