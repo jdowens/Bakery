@@ -5,6 +5,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     money:0,
     curCakeValue:0,
     currentPattern:null,
+    patternQueue:[],
     statusLayer:null,
 
     ctor:function() {
@@ -16,9 +17,21 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this._super();
         this.scheduleUpdate();
         this.setupGraphics();
-        this.currentPattern = new MultiClickPatternLayer(false, false, res.testcakepattern1_png, 1, cc.p(0,0));
-        this.addChild(this.currentPattern);
-        this.currentPattern.onStart(this);
+        this.setupTestQueue();
+        this.nextPattern();
+    },
+
+    setupTestQueue:function() {
+        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern1_png, 1, cc.p(0,0)));
+        this.patternQueue.push(new MultiClickPatternLayer(false, false, res.testcakepattern1_png, 3, cc.p(10,10)));
+    },
+
+    nextPattern:function() {
+        if (this.patternQueue.length > 0) {
+            this.currentPattern = this.patternQueue.shift();
+            this.addChild(this.currentPattern);
+            this.currentPattern.onStart(this);
+        }
     },
 
     setupGraphics:function() {
@@ -43,6 +56,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
             cc.log(this.curCakeValue);
             this.removeChild(this.currentPattern);
             delete this.currentPattern;
+            this.nextPattern();
         }
     },
 
@@ -184,3 +198,6 @@ var MultiClickPatternLayer = cc.Layer.extend({
     }
 });
 
+var ClickAndHoldPatternLayer = cc.Layer.extend({
+
+});

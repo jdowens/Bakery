@@ -16,7 +16,7 @@
 
 
 
-var MenuLayer = cc.Layer.extend({
+var MenuLayer2 = cc.Layer.extend({
 
     ctor:function(){
         this._super();
@@ -98,7 +98,7 @@ var MenuLayer = cc.Layer.extend({
 var MenuScene2 = cc.Scene.extend({
     onEnter:function(){
         this._super();
-        var layer = new MenuLayer();
+        var layer = new MenuLayer2();
         layer.init();
         this.addChild(layer);
     }
