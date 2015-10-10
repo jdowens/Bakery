@@ -7,7 +7,8 @@ var res = {
     startmenuBG_png : "res/Backgrounds/startmenuBG.png",
     playBG_png : "res/Backgrounds/playBG.png",
     gameoverBG_png : "res/Backgrounds/gameoverBG.png",
-    differentBG_png : "res/Backgrounds/differentBG.png"
+    differentBG_png : "res/Backgrounds/differentBG.png",
+    testcakepattern1_png : "res/TestCake/testcakepattern1.png"
 };
 
 var g_resources = [
@@ -19,5 +20,6 @@ var g_resources = [
     res.startmenuBG_png,
     res.playBG_png,
     res.gameoverBG_png,
-    res.differentBG_png
+    res.differentBG_png,
+    res.testcakepattern1_png
 ];

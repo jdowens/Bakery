@@ -8,11 +8,11 @@ var PlayScene = cc.Scene.extend({
         this.scheduleUpdate();
         this.backgroundLayer = new cc.LayerColor(cc.color(0, 0, 0, 255));
         //this.backgroundLayer = new BackgroundLayer();
-        this.actionLayer = new TestClickAndHoldLayer();
+        this.actionLayer = new TestCakeCombinedLayer();
         this.statusLayer = new StatusLayer();
 
         this.actionLayer.setStatusLayer(this.statusLayer);
-
+        this.actionLayer.addToTimer(10);
         this.addChild(this.backgroundLayer);
         this.addChild(this.actionLayer);
         this.addChild(this.statusLayer);

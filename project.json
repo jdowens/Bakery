@@ -18,6 +18,7 @@
         "src/PlayScene.js",
         "src/StatusLayer.js",
         "src/TestCakeLayer.js",
-        "src/TestClickAndHoldLayer.js"
+        "src/TestClickAndHoldLayer.js",
+        "src/TestCakeCombinedLayer.js"
     ]
 }

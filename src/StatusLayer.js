@@ -1,6 +1,5 @@
 var StatusLayer = cc.Layer.extend({
     labelMoney:null,
-    labelClicksRemaining:null,
     labelEarned:null,
     labelTime:null,
 
@@ -18,10 +17,6 @@ var StatusLayer = cc.Layer.extend({
         this.labelMoney.setPosition(cc.p(100, winsize.height - 20));
         this.addChild(this.labelMoney);
 
-        this.labelClicksRemaining = new cc.LabelTTF("Clicks Remaining: 0", "Helvetica", 20);
-        this.labelClicksRemaining.setPosition(cc.p(winsize.width - 100, winsize.height - 20));
-        this.addChild(this.labelClicksRemaining);
-
         this.labelEarned = new cc.LabelTTF("+ 0", "Helvetica", 20);
         this.labelEarned.setColor(cc.color(0,0,0));
         this.labelEarned.setPosition(cc.p(0,0));
@@ -35,7 +30,6 @@ var StatusLayer = cc.Layer.extend({
     },
 
     updateText:function(actionLayer) {
-        this.labelClicksRemaining.setString("Remaining Clicks: " + actionLayer.remainingClicks);
         this.labelMoney.setString("Dat phat bank: " + actionLayer.money);
         var timeDisplay = actionLayer.remainingTime.toFixed(1);
         this.labelTime.setString("Time: " + timeDisplay);
