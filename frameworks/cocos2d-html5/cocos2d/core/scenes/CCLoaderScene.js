@@ -48,7 +48,7 @@ cc.LoaderScene = cc.Scene.extend({
         var logoHeight = 200;
 
         // bg
-        var bgLayer = self._bgLayer = new cc.LayerColor(cc.color(32, 32, 32, 255));
+        var bgLayer = self._bgLayer = new cc.LayerColor(cc.color(255, 255, 255, 255));
         self.addChild(bgLayer, 0);
 
         //image move to CCSceneFile.js
