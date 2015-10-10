@@ -68,12 +68,12 @@ var MenuLayer2 = cc.Layer.extend({
         opt.setPosition(but3pos);
         this.addChild(opt);
 
-        var menuItemExit = new cc.MenuItemSprite(           // Create button 4: Exit
+        var menuMenuExit = new cc.MenuItemSprite(           // Create button 4: Exit
             new cc.Sprite(res.start_n_png),
             new cc.Sprite(res.start_s_png),
-            this.onExit, this);
+            this.onMenuExit, this);
 
-        var exit = new cc.Menu(menuItemExit);               // Menu container for button 4
+        var exit = new cc.Menu(menuMenuExit);               // Menu container for button 4
         exit.setPosition(but4pos);
         this.addChild(exit);
     },
@@ -85,6 +85,7 @@ var MenuLayer2 = cc.Layer.extend({
 
     onContinue:function() {
         cc.log("You clicked the continue button, good job...");
+        cc.director.runScene(new HiScoreScene());
     },
 
     onOptions:function(){
@@ -92,7 +93,7 @@ var MenuLayer2 = cc.Layer.extend({
         cc.director.runScene(new OptionsScene());
     },
 
-    onExit:function() {
+    onMenuExit:function() {
         cc.log("You clicked the exit button, good job...");
     }
 });
