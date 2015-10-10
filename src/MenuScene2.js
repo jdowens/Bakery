@@ -80,6 +80,7 @@ var MenuLayer2 = cc.Layer.extend({
 
     onPlay:function(){                                          // These show that the different buttons are activated
         cc.log("You clicked the play button, good job...");
+        cc.director.runScene(new PlayScene());
     },
 
     onContinue:function() {
