@@ -26,12 +26,12 @@ var MenuLayer2 = cc.Layer.extend({
 
         this._super();
 
-        var menuitems = 4;                                                                          // The number of items/buttons on menu (subject to change)
+        var menuitems = 4;                                                                                  // The number of items/buttons on menu (subject to change)
         var winsize = cc.director.getWinSize();
-        var but1pos = cc.p(winsize.width / 2, winsize.height * (1 / (menuitems + 1)));                  // The position of button 1
-        var but2pos = cc.p(winsize.width / 2, winsize.height * (2 / (menuitems + 1)));                  // Etc.
-        var but3pos = cc.p(winsize.width / 2, winsize.height * (3 / (menuitems + 1)));
-        var but4pos = cc.p(winsize.width / 2, winsize.height * (4 / (menuitems + 1)));
+        var but1pos = cc.p(winsize.width / 2, winsize.height * ((menuitems) / (menuitems + 1)));            // The position of button 1 (Now top down)
+        var but2pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 1) / (menuitems + 1)));
+        var but3pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 2) / (menuitems + 1)));
+        var but4pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 3) / (menuitems + 1)));        // More buttons can be added by following this format
 
         var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
 
