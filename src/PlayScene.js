@@ -6,7 +6,8 @@ var PlayScene = cc.Scene.extend({
     onEnter:function() {
         this._super();
         this.scheduleUpdate();
-        this.backgroundLayer = new BackgroundLayer();
+        this.backgroundLayer = new cc.LayerColor(cc.color(0, 0, 0, 255));
+        //this.backgroundLayer = new BackgroundLayer();
         this.actionLayer = new TestClickAndHoldLayer();
         this.statusLayer = new StatusLayer();
 
