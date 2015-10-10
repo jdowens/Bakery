@@ -224,7 +224,7 @@ var TestClickAndHoldLayer = cc.Layer.extend({
                         target.addToTimer(-1.0);
                     }
                 }
-                return false;
+                return true;
             },
 
             onTouchEnded:function(touch, event) {
