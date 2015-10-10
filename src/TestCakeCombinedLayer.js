@@ -28,7 +28,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
             this.patternQueue.push(new MultiClickPatternLayer(true, true, false, res.testcakepattern3_png, 0, cc.p(0, 0)));
         }
         this.patternQueue.push(new MultiClickPatternLayer(true, true, true, res.testcakepattern3_png, 0, cc.p(0, 0)));
-        this.patternQueue.push(new ClickAndHoldPatternLayer(false, false, true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 2.0, cc.p(0, 0)));
+        this.patternQueue.push(new ClickAndHoldPatternLayer(false, false, true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
         this.foodQueue.push("testcake1.png");
         this.foodQueue.push("testcake2.png");
         this.foodQueue.push("testcake3.png");
@@ -102,7 +102,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
 
     onFinish:function() {
         this.statusLayer.spawnEarnedText(this.curCakeValue, this.ovenSprite.getPosition());
-        this.addToTimer(this.curCakeValue/50);
+        this.addToTimer(this.curCakeValue/100);
         this.money += this.curCakeValue;
         this.curCakeValue = 0;
         this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
@@ -262,8 +262,8 @@ var MultiClickPatternLayer = cc.Layer.extend({
 });
 
 var ClickAndHoldPatternLayer = cc.Layer.extend({
-    MAX_HOLD_DURATION:0.5,
-    MIN_HOLD_DURATION:0.25,
+    MAX_HOLD_DURATION:0.125,
+    MIN_HOLD_DURATION:0.0625,
     SECONDS_PER_GOLD:0.001,
     max_gold:0,
     patternSprite:null,

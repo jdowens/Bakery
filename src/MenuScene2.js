@@ -85,7 +85,8 @@ var MenuLayer2 = cc.Layer.extend({
 
     onContinue:function() {
         cc.log("You clicked the continue button, good job...");
-        cc.director.runScene(new HiScoreScene());
+        window.location.replace("http://dropthenet.com/hiscores.html");
+        //cc.director.runScene(new HiScoreScene());
     },
 
     onOptions:function(){
