@@ -1,6 +1,8 @@
 var GameOverLayer = cc.Layer.extend({
     money:0,
     labelMoney:null,
+    name:"",
+    textBox:null,
 
     ctor : function() {
         this._super();
@@ -25,10 +27,27 @@ var GameOverLayer = cc.Layer.extend({
         menu.setPosition(cc.p(centerpos.x, centerpos.y - 100));
         this.addChild(menu);
 
+        // setup name box
+        this.textBox = new cc.EditBox(cc.size(200, 50), new cc.Scale9Sprite(res.red_button10_png), new cc.Scale9Sprite(res.red_button13_png));
+        this.textBox.setFontColor(cc.color(0,0,0,255));
+        this.textBox.setPosition(centerpos);
+        this.addChild(this.textBox);
     },
 
     onPlay : function() {
         cc.log("==onRestart clicked");
+        this.name = this.textBox.string;
+        this.name = this.name.replace(/\s+/g, '');
+        this.name = this.name.replace(/\?/g, '');
+        if (this.name != "") {
+            cc.log("http://dropthenet.com/cgi-bin/test.cgi?" + this.money + "?" + this.name);
+            var post = window.open("http://dropthenet.com/cgi-bin/test.cgi?" + this.money + "?" + this.name);
+            setTimeout(function () {
+                post.close();
+            }, 100);
+        }
+        this.name = "";
+        this.textBox.string = "";
         cc.director.runScene(new MenuScene2());
     },
 
