@@ -84,15 +84,16 @@ var MenuLayer2 = cc.Layer.extend({
     },
 
     onContinue:function() {
-        cc.log("You clicked the continue button, good job...")
+        cc.log("You clicked the continue button, good job...");
     },
 
     onOptions:function(){
         cc.log("You clicked the options button, good job...");
+        cc.director.runScene(new OptionsScene());
     },
 
     onExit:function() {
-        cc.log("You clicked the exit button, good job...")
+        cc.log("You clicked the exit button, good job...");
     }
 });
 

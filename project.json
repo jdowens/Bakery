@@ -20,6 +20,7 @@
         "src/TestCakeLayer.js",
         "src/TestClickAndHoldLayer.js",
         "src/TestCakeCombinedLayer.js",
-        "src/MenuScene2.js"
+        "src/MenuScene2.js",
+        "src/OptionsScene.js"
     ]
 }
