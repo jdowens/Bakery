@@ -86,11 +86,11 @@ var TestClickAndHoldLayer = cc.Layer.extend({
         this.spriteBatch = new cc.SpriteBatchNode(res.testcake_png);
         this.addChild(this.spriteBatch);
 
-        this.cakeSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcake1.png"));
+        this.cakeSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("testcake1.png"));
         this.cakeSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.cakeSprite);
 
-        this.patternSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
+        this.patternSprite = new cc.Sprite(cc.spriteFrameCache.getSpriteFrame("testcakepattern3.png"));
         //this.patternSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.patternSprite);
 
@@ -104,7 +104,6 @@ var TestClickAndHoldLayer = cc.Layer.extend({
         // setup click count for current region
         this.requiredHoldTime = Math.random()*(this.MAX_HOLD_DURATION-this.MIN_HOLD_DURATION) + this.MIN_HOLD_DURATION;
         this.remainingHoldTime = this.requiredHoldTime;
-        cc.log("Req: " + this.requiredHoldTime + "Rem: " + this.remainingHoldTime);
     },
 
     setupPatternSize:function() {
@@ -131,10 +130,7 @@ var TestClickAndHoldLayer = cc.Layer.extend({
             onMouseDown:function(event) {
                 var target = event.getCurrentTarget();
                 if (target.currentPattern <= 2) {
-                    var rect = new cc.Rect(target.patternSprite.getPosition().x - target.patternSprite.getTextureRect().width / 2,
-                        target.patternSprite.getPosition().y - target.patternSprite.getTextureRect().height / 2,
-                        target.patternSprite.getTextureRect().width,
-                        target.patternSprite.getTextureRect().height);
+                    var rect = target.patternOutlineSprite.getBoundingBoxToWorld();
                     var point = event.getLocation();
 
                     // clicked on pattern
@@ -162,10 +158,7 @@ var TestClickAndHoldLayer = cc.Layer.extend({
             selected:false,
             onMouseDown:function(event) {
                 var target = event.getCurrentTarget();
-                var rect = new cc.Rect(target.cakeSprite.getPosition().x - target.cakeSprite.getTextureRect().width / 2,
-                    target.cakeSprite.getPosition().y - target.cakeSprite.getTextureRect().height / 2,
-                    target.cakeSprite.getTextureRect().width,
-                    target.cakeSprite.getTextureRect().height);
+                var rect = target.cakeSprite.getBoundingBoxToWorld();
                 var point = event.getLocation();
                 if (cc.rectContainsPoint(rect, point)) {
                     cc.log("Clicked inside cake sprite!");
@@ -180,12 +173,8 @@ var TestClickAndHoldLayer = cc.Layer.extend({
                 }
             },
             onMouseUp:function(event) {
-
                 var target = event.getCurrentTarget();
-                var rect = new cc.Rect(target.ovenSprite.getPosition().x - target.ovenSprite.getTextureRect().width / 2,
-                    target.ovenSprite.getPosition().y - target.ovenSprite.getTextureRect().height / 2,
-                    target.ovenSprite.getTextureRect().width,
-                    target.ovenSprite.getTextureRect().height);
+                var rect = target.ovenSprite.getBoundingBoxToWorld();
                 var point = event.getLocation();
                 if (cc.rectContainsPoint(rect, point) && this.selected) {
                     cc.log("Cake baked!");
@@ -204,14 +193,11 @@ var TestClickAndHoldLayer = cc.Layer.extend({
     setupTouchCallbacks:function() {
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches:true,
+            swallowTouches:false,
             onTouchBegan:function(touch, event) {
                 var target = event.getCurrentTarget();
                 if (target.currentPattern <= 2) {
-                    var rect = new cc.Rect(target.patternSprite.getPosition().x - target.patternSprite.getTextureRect().width / 2,
-                        target.patternSprite.getPosition().y - target.patternSprite.getTextureRect().height / 2,
-                        target.patternSprite.getTextureRect().width,
-                        target.patternSprite.getTextureRect().height);
+                    var rect = target.patternOutlineSprite.getBoundingBoxToWorld();
                     var point = touch.getLocation();
                     // clicked on pattern
                     if (cc.rectContainsPoint(rect, point)) {
@@ -241,10 +227,7 @@ var TestClickAndHoldLayer = cc.Layer.extend({
             selected:false,
             onTouchBegan:function(touch, event) {
                 var target = event.getCurrentTarget();
-                var rect = new cc.Rect(target.cakeSprite.getPosition().x - target.cakeSprite.getTextureRect().width / 2,
-                    target.cakeSprite.getPosition().y - target.cakeSprite.getTextureRect().height / 2,
-                    target.cakeSprite.getTextureRect().width,
-                    target.cakeSprite.getTextureRect().height);
+                var rect = target.cakeSprite.getBoundingBoxToWorld();
                 var point = touch.getLocation();
                 if (cc.rectContainsPoint(rect, point)) {
                     cc.log("Clicked inside cake sprite!");
@@ -260,12 +243,8 @@ var TestClickAndHoldLayer = cc.Layer.extend({
                 }
             },
             onTouchEnded:function(touch, event) {
-
                 var target = event.getCurrentTarget();
-                var rect = new cc.Rect(target.ovenSprite.getPosition().x - target.ovenSprite.getTextureRect().width / 2,
-                    target.ovenSprite.getPosition().y - target.ovenSprite.getTextureRect().height / 2,
-                    target.ovenSprite.getTextureRect().width,
-                    target.ovenSprite.getTextureRect().height);
+                var rect = target.ovenSprite.getBoundingBoxToWorld();
                 var point = touch.getLocation();
                 if (cc.rectContainsPoint(rect, point) && this.selected) {
                     cc.log("Cake baked!");
