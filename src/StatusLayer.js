@@ -23,7 +23,7 @@ var StatusLayer = cc.Layer.extend({
         this.addChild(this.labelClicksRemaining);
 
         this.labelEarned = new cc.LabelTTF("+ 0", "Helvetica", 20);
-        this.labelEarned.setColor(cc.color._getYellow());
+        this.labelEarned.setColor(cc.color(0,0,0));
         this.labelEarned.setPosition(cc.p(0,0));
         this.labelEarned.setOpacity(0);
         this.addChild(this.labelEarned);
