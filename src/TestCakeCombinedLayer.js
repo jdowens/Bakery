@@ -89,9 +89,9 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     },
 
     update:function(dt) {
-        this.addToTimer(-dt);
-        if(this.remainingTime < 0)
-            this.onTimeUp();
+        //this.addToTimer(-dt);
+        //if(this.remainingTime < 0)
+        //    this.onTimeUp();
         if (this.currentPattern != null && this.currentPattern.isFinished()) {
             if (this.currentPattern.advancesFood)
                 this.advanceFood();
