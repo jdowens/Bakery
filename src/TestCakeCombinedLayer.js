@@ -124,28 +124,42 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     }
 });
 
-/*var Pattern = cc.Class.extend({
+var Pattern = cc.Layer.extend({
+    finished:false,
+    listener:null,
+    actionLayer:null,
+
     ctor:function() {
         this._super();
+    },
+
+    onStart:function(layer) {
+        this.actionLayer = layer;
+    },
+
+    onFinish:function() {
+        if (this.listener !== null)
+            cc.eventManager.removeListener(this.listener);
+    },
+
+    isFinished:function() {
+        return this.finished;
     }
 });
 
 // pattern is inheritable
-Pattern.extend = cc.Class.extend;*/
+Pattern.extend = cc.Class.extend;
 
-var MultiClickPatternLayer = cc.Layer.extend({
+var MultiClickPatternLayer = Pattern.extend({
     MAX_CLICKS:2,
     clickCountRandom:false,
     patternPositionRandom:false,
     patternSprite:null,
-    actionLayer:null,
     requiredClicks:0,
     remainingClicks:0,
     missClicks:0,
     offsetFromFood:null,            // defaults to center of food
-    finished:false,
     clickAndDragSelected:false,
-    listener:null,
     advancesFood:false,
 
     ctor:function(clickCountRandom, patternPositionRandom, advancesFood, patternSpriteResource, requiredClicks, offsetFromFood) {
@@ -191,7 +205,7 @@ var MultiClickPatternLayer = cc.Layer.extend({
     },
 
     onStart:function(layer) {
-        this.actionLayer = layer;
+        this._super(layer);
         this.setupPatternSpritePosition();
         this.setupPatternSpriteOpacities();
         if ('mouse' in cc.sys.capabilities) {
@@ -203,7 +217,7 @@ var MultiClickPatternLayer = cc.Layer.extend({
     },
 
     onFinish:function() {
-        cc.eventManager.removeListener(this.listener);
+        this._super();
         this.actionLayer.curCakeValue += this.requiredClicks*10 + this.missClicks*-10;
     },
 
@@ -261,7 +275,7 @@ var MultiClickPatternLayer = cc.Layer.extend({
     }
 });
 
-var ClickAndHoldPatternLayer = cc.Layer.extend({
+var ClickAndHoldPatternLayer = Pattern.extend({
     MAX_HOLD_DURATION:0.125,
     MIN_HOLD_DURATION:0.0625,
     SECONDS_PER_GOLD:0.001,
@@ -275,8 +289,6 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
     positionRandom:false,
     offsetFromFood:null,
     actionLayer:null,
-    finished:false,
-    listener:null,
     advancesFood:false,
 
     ctor:function(holdTimeRandom, positionRandom, advancesFood, max_gold, patternSpriteResource,
@@ -332,9 +344,9 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
     },
 
     onStart:function(layer) {
+        this._super(layer);
         this.scheduleUpdate();
         this.setupPatternSize();
-        this.actionLayer = layer;
         this.setupPatternSpritePosition();
         if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
@@ -407,24 +419,18 @@ var ClickAndHoldPatternLayer = cc.Layer.extend({
     },
 
     onFinish:function() {
-        cc.eventManager.removeListener(this.listener);
+        this._super();
         var value = this.max_gold -
             Math.floor(Math.abs(this.remainingHoldTime) / this.SECONDS_PER_GOLD);
         if (value < 0)
             value = 0;
         this.actionLayer.curCakeValue += value;
-    },
-
-    isFinished:function() {
-        return this.finished;
     }
 });
 
-var DragAndDropPatternLayer = cc.Layer.extend({
+var DragAndDropPatternLayer = Pattern.extend({
     spriteTarget:null,
     spriteDestination:null,
-    listener:null,
-    finished:false,
     actionLayer:null,
     selected:false,
 
@@ -435,7 +441,7 @@ var DragAndDropPatternLayer = cc.Layer.extend({
     },
 
     onStart:function(layer) {
-        this.actionLayer = layer;
+        this._super(layer);
         if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
         }
@@ -507,7 +513,8 @@ var DragAndDropPatternLayer = cc.Layer.extend({
     },
 
     onFinish:function() {
-        cc.eventManager.removeListener(this.listener);
+        this._super();
+
     },
 
     isFinished:function() {
