@@ -563,3 +563,21 @@ var DragAndDropPatternLayer = Pattern.extend({
     }
 
 });
+
+var DrawLinesPatternLayer = Pattern.extend({
+    patternSprite:null,
+    requiredLines:0,
+    requiredLineLength:0,
+
+    ctor:function() {
+        this._super();
+    },
+
+    onStart:function(layer) {
+        this._super(layer);
+    },
+
+    onFinish:function() {
+        this._super();
+    }
+});
