@@ -9,6 +9,7 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     statusLayer:null,
     foodQueue:[],
     gameOver:false,
+    ovenCakeValue:0,
 
     ctor:function() {
         this._super();
@@ -18,9 +19,32 @@ var TestCakeCombinedLayer = cc.Layer.extend({
     init:function() {
         this._super();
         this.scheduleUpdate();
+        this.setupMouseCallbacks();
         this.setupTestQueue();
         this.setupGraphics();
         this.nextPattern();
+    },
+
+    setupMouseCallbacks:function() {
+        var listener = cc.EventListener.create({
+            event:cc.EventListener.MOUSE,
+            onMouseDown:function(event) {
+                var target = event.getCurrentTarget();
+                target.onOvenRequest(event.getLocation());
+            }
+        });
+        cc.eventManager.addListener(listener, this);
+    },
+
+    onOvenRequest:function(position) {
+        var rect = this.ovenSprite.getBoundingBoxToWorld();
+        if (!this.ovenSprite.available && cc.rectContainsPoint(rect, position)) {
+            var perror = this.ovenSprite.removeFood();
+            this.ovenCakeValue = Math.floor((1-perror)*this.ovenCakeValue);
+            if (this.ovenCakeValue < 0)
+                this.ovenCakeValue = 0;
+            this.onFinish();
+        }
     },
 
     setupTestQueue:function() {
@@ -41,15 +65,17 @@ var TestCakeCombinedLayer = cc.Layer.extend({
             this.currentPattern.onStart(this);
         }
         else {
-            this.onFinish();
+            this.onPlaceInOven();
         }
     },
 
     setupGraphics:function() {
         // setup graphics
-        this.ovenSprite = new cc.Sprite(res.oven_png);
+        this.ovenSprite = new Oven(res.oven_png);
         this.addChild(this.ovenSprite);
-        this.ovenSprite.attr({x:cc.director.getWinSize().width - this.ovenSprite.getTextureRect().width / 2,
+        //this.ovenSprite.attr({x:cc.director.getWinSize().width - this.ovenSprite.getTextureRect().width / 2,
+        //    y: cc.director.getWinSize().height / 2});
+        this.ovenSprite.attr({x:cc.director.getWinSize().width - this.ovenSprite.statusBar.getSprite().getBoundingBoxToWorld().width,
             y: cc.director.getWinSize().height / 2});
 
         cc.spriteFrameCache.addSpriteFrames(res.testcake_plist);
@@ -57,7 +83,8 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.addChild(this.spriteBatch);
 
         this.foodSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame(this.foodQueue.shift()));
-        this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        //this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        this.foodSprite.attr({x:this.ovenSprite.statusBar.getSprite().getBoundingBoxToWorld().width,y:cc.director.getWinSize().height/2});
         this.spriteBatch.addChild(this.foodSprite);
     },
 
@@ -100,15 +127,21 @@ var TestCakeCombinedLayer = cc.Layer.extend({
         this.foodSprite.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame(this.foodQueue.shift()));
     },
 
-    onFinish:function() {
-        this.statusLayer.spawnEarnedText(this.curCakeValue, this.ovenSprite.getPosition());
-        this.addToTimer(this.curCakeValue/100);
-        this.money += this.curCakeValue;
+    onPlaceInOven:function() {
+        this.ovenCakeValue = this.curCakeValue;
         this.curCakeValue = 0;
-        this.foodSprite.attr({x:cc.director.getWinSize().width/2,y:cc.director.getWinSize().height/2});
+        this.foodSprite.attr({x:this.ovenSprite.statusBar.getSprite().getBoundingBoxToWorld().width,y:cc.director.getWinSize().height/2});
         this.setupTestQueue();
         this.resetGraphics();
         this.nextPattern();
+    },
+
+    onFinish:function() {
+        cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
+        this.statusLayer.spawnEarnedText(this.ovenCakeValue, this.ovenSprite.getPosition());
+        this.addToTimer(this.ovenCakeValue/100);
+        this.money += this.ovenCakeValue;
+        this.ovenCakeValue = 0;
     },
 
     onTimeUp:function() {
@@ -264,9 +297,9 @@ var MultiClickPatternLayer = Pattern.extend({
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
         }
         else {
-            cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
-            this.missClicks++;
-            this.actionLayer.addToTimer(-1.0);
+            //cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
+            //this.missClicks++;
+            //this.actionLayer.addToTimer(-1.0);
         }
     },
 
@@ -408,9 +441,9 @@ var ClickAndHoldPatternLayer = Pattern.extend({
             this.selected = true;
         }
         else {
-            cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
-            this.selected = false;
-            this.actionLayer.addToTimer(-1.0);
+            //cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);
+            //this.selected = false;
+            //this.actionLayer.addToTimer(-1.0);
         }
     },
 
@@ -433,6 +466,7 @@ var DragAndDropPatternLayer = Pattern.extend({
     spriteDestination:null,
     actionLayer:null,
     selected:false,
+    drugFrom:null,
 
     ctor:function(spriteTarget, spriteDestination) {
         this._super();
@@ -494,6 +528,7 @@ var DragAndDropPatternLayer = Pattern.extend({
         var rect = this.spriteTarget.getBoundingBoxToWorld();
         if (cc.rectContainsPoint(rect, pos)) {
             this.selected = true;
+            this.drugFrom = new cc.p(pos.x, pos.y);
         }
     },
 
@@ -506,15 +541,21 @@ var DragAndDropPatternLayer = Pattern.extend({
 
     onDragEnd:function(pos) {
         var rect = this.spriteDestination.getBoundingBoxToWorld();
-        if (cc.rectContainsPoint(rect, pos)) {
-            cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
-            this.finished = true;
+        if (this.selected && cc.rectContainsPoint(rect, pos)) {
+            if (this.spriteDestination.available) {
+                cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
+                this.finished = true;
+            }
+            else {
+                this.spriteTarget.setPosition(this.drugFrom);
+            }
         }
+        this.selected = false;
     },
 
     onFinish:function() {
         this._super();
-
+        this.spriteDestination.startBaking(Math.random() + 2.0);
     },
 
     isFinished:function() {
