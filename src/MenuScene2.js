@@ -26,12 +26,13 @@ var MenuLayer2 = cc.Layer.extend({
 
         this._super();
 
-        var menuitems = 4;                                                                                  // The number of items/buttons on menu (subject to change)
+        var menuitems = 5;                                                                                  // The number of items/buttons on menu (subject to change)
         var winsize = cc.director.getWinSize();
-        var but1pos = cc.p(winsize.width / 2, winsize.height * ((menuitems) / (menuitems + 1)));            // The position of button 1 (Now top down)
-        var but2pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 1) / (menuitems + 1)));
-        var but3pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 2) / (menuitems + 1)));
-        var but4pos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 3) / (menuitems + 1)));        // More buttons can be added by following this format
+        var playPos = cc.p(winsize.width / 2, winsize.height * ((menuitems) / (menuitems + 1)));            // The position of button 1 (Now top down)
+        var contPos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 1) / (menuitems + 1)));
+        var drcsPos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 2) / (menuitems + 1)));
+        var optPos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 3) / (menuitems + 1)));
+        var exitPos = cc.p(winsize.width / 2, winsize.height * ((menuitems - 4) / (menuitems + 1)));        // More buttons can be added by following this format
 
         var centerpos = cc.p(winsize.width / 2, winsize.height / 2);
 
@@ -47,7 +48,7 @@ var MenuLayer2 = cc.Layer.extend({
             this.onPlay, this);
 
         var play = new cc.Menu(menuItemPlay);               // Menu container for button 1
-        play.setPosition(but1pos);
+        play.setPosition(playPos);
         this.addChild(play);
 
         var menuItemContinue = new cc.MenuItemSprite(       // Create button 2: Continue
@@ -56,25 +57,34 @@ var MenuLayer2 = cc.Layer.extend({
             this.onContinue, this);
 
         var cont = new cc.Menu(menuItemContinue);           // Menu container for button 2
-        cont.setPosition(but2pos);
+        cont.setPosition(contPos);
         this.addChild(cont);
 
-        var menuItemOptions = new cc.MenuItemSprite(        // Create button 3 : Options
+        var menuItemDirections = new cc.MenuItemSprite(       // Create button 3: Directions
+            new cc.Sprite(res.start_n_png),
+            new cc.Sprite(res.start_s_png),
+            this.onDirections, this);
+
+        var drcs = new cc.Menu(menuItemDirections);           // Menu container for button 3
+        drcs.setPosition(drcsPos);
+        this.addChild(drcs);
+
+        var menuItemOptions = new cc.MenuItemSprite(        // Options
             new cc.Sprite(res.start_n_png),
             new cc.Sprite(res.start_s_png),
             this.onOptions, this);
 
-        var opt = new cc.Menu(menuItemOptions);            // Menu container for button 3
-        opt.setPosition(but3pos);
+        var opt = new cc.Menu(menuItemOptions);            // Menu container
+        opt.setPosition(optPos);
         this.addChild(opt);
 
-        var menuMenuExit = new cc.MenuItemSprite(           // Create button 4: Exit
+        var menuMenuExit = new cc.MenuItemSprite(           // Exit
             new cc.Sprite(res.start_n_png),
             new cc.Sprite(res.start_s_png),
             this.onMenuExit, this);
 
-        var exit = new cc.Menu(menuMenuExit);               // Menu container for button 4
-        exit.setPosition(but4pos);
+        var exit = new cc.Menu(menuMenuExit);               // Menu container
+        exit.setPosition(exitPos);
         this.addChild(exit);
     },
 
@@ -87,6 +97,10 @@ var MenuLayer2 = cc.Layer.extend({
         cc.log("You clicked the continue button, good job...");
         window.open("http://dropthenet.com/hiscores.html");
         //cc.director.runScene(new HiScoreScene());
+    },
+
+    onDirections:function() {
+        cc.log("You clicked the directions button, good job...");
     },
 
     onOptions:function(){
