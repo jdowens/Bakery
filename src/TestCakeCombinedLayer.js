@@ -575,6 +575,7 @@ var DrawLinesPatternLayer = Pattern.extend({
     lineEnd:null,
     offsetFromFood:null,
     advancesFood:false,
+    validLineStarted:false,
 
     ctor:function(requiredLines, requiredLineLength, patternSpriteResource, advancesFood, offsetFromFood) {
         this._super();
@@ -642,15 +643,17 @@ var DrawLinesPatternLayer = Pattern.extend({
 
     onLineStart:function(pos) {
         var rect = this.patternSprite.getBoundingBoxToWorld();
+        this.lineStart.x = pos.x;
+        this.lineStart.y = pos.y;
         if (cc.rectContainsPoint(rect, pos)) {
-            this.lineStart.x = pos.x;
-            this.lineStart.y = pos.y;
+            this.validLineStarted = true;
         }
     },
 
     onLineEnd:function(pos) {
         //var rect = this.patternSprite.getBoundingBoxToWorld();
-        //if (cc.rectContainsPoint(rect, pos)) {
+        if (this.validLineStarted) {
+            this.validLineStarted = false;
             this.lineEnd.x = pos.x;
             this.lineEnd.y = pos.y;
             cc.log(cc.pDistance(this.lineStart, this.lineEnd));
@@ -660,11 +663,13 @@ var DrawLinesPatternLayer = Pattern.extend({
                     this.finished = true;
                 }
             }
-        //}
+        }
     },
 
     onFinish:function() {
         this._super();
+        delete this.lineStart;
+        delete this.lineEnd;
         this.actionLayer.curCakeValue += this.requiredLines*10;
     }
 });
