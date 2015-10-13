@@ -2,11 +2,13 @@
 <html>
 <body>
 
-//note: make two columns for names and scores.
-//      only take in scores then compare against new game score.
-//      have a counter for the place then take in names and replace
-//      the variable "newscore" comes from the javascript
-
+//note(Plane A): make two columns for names and scores.
+//              only take in scores then compare against new game score.
+//              have a counter to tack line to delete corresponding name.
+//              the variable "newscore" comes from the javascript.
+//
+//Assumption:   newfile.txt is a file already created.
+//              newscore contains the score of the game just played
 <?php
 $myfile = fopen("newfile.txt","w") or die("Unable to open file!");
 $line = fgets($myfile);         //fgets gets the first score from the file pointer
