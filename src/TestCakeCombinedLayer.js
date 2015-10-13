@@ -649,8 +649,8 @@ var DrawLinesPatternLayer = Pattern.extend({
     },
 
     onLineEnd:function(pos) {
-        var rect = this.patternSprite.getBoundingBoxToWorld();
-        if (cc.rectContainsPoint(rect, pos)) {
+        //var rect = this.patternSprite.getBoundingBoxToWorld();
+        //if (cc.rectContainsPoint(rect, pos)) {
             this.lineEnd.x = pos.x;
             this.lineEnd.y = pos.y;
             cc.log(cc.pDistance(this.lineStart, this.lineEnd));
@@ -660,7 +660,7 @@ var DrawLinesPatternLayer = Pattern.extend({
                     this.finished = true;
                 }
             }
-        }
+        //}
     },
 
     onFinish:function() {
