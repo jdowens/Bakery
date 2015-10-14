@@ -26,6 +26,11 @@
         "src/Oven.js",
         "src/BreadLayer.js",
         "src/SpriteShake.js",
-        "src/SpriteFunctionPath.js"
+        "src/SpriteFunctionPath.js",
+        "src/Pattern/Pattern.js",
+        "src/Pattern/ClickAndHoldPatternLayer.js",
+        "src/Pattern/DragAndDropPatternLayer.js",
+        "src/Pattern/DrawLinesPatternLayer.js",
+        "src/Pattern/MultiClickPatternLayer.js"
     ]
 }
