@@ -25,6 +25,7 @@
         "src/HiScoreScene.js",
         "src/Oven.js",
         "src/BreadLayer.js",
-        "src/SpriteShake.js"
+        "src/SpriteShake.js",
+        "src/SpriteFunctionPath.js"
     ]
 }

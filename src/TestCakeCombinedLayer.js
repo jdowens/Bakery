@@ -657,9 +657,11 @@ var DrawLinesPatternLayer = Pattern.extend({
             this.validLineStarted = false;
             this.lineEnd.x = pos.x;
             this.lineEnd.y = pos.y;
-            cc.log(cc.pDistance(this.lineStart, this.lineEnd));
+            //cc.log(cc.pDistance(this.lineStart, this.lineEnd));
             if (cc.pDistance(this.lineStart, this.lineEnd) > this.requiredLineLength) {
                 this.remainingLines--;
+                this.actionLayer.spriteBatch.runAction(new SpriteFunctionPath(0.3, new Function("return 0"),
+                    new Function("t", "return 10*Math.sin(4*t*Math.PI + Math.PI)"), true));
                 if (this.remainingLines == 0) {
                     this.finished = true;
                 }
