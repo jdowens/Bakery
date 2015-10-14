@@ -1,6 +1,3 @@
-/**
- * Created by Paradise_2 on 10/12/2015.
- */
 var BreadLayer = cc.Layer.extend({
     foodSprite:null,
     ovenSprite:null,
@@ -13,6 +10,7 @@ var BreadLayer = cc.Layer.extend({
     foodQueue:[],
     gameOver:false,
     ovenCakeValue:0,
+    spriteBatch:null,
 
     ctor:function() {
         this._super();

@@ -285,6 +285,7 @@ var MultiClickPatternLayer = Pattern.extend({
         var rect = this.patternSprite.getBoundingBoxToWorld();
         if (cc.rectContainsPoint(rect, point)) {
             this.remainingClicks--;
+            this.actionLayer.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));
             this.setupPatternSpriteOpacities();
             if (this.remainingClicks == 0) {
                 this.finished = true;
