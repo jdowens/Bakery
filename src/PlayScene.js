@@ -8,7 +8,7 @@ var PlayScene = cc.Scene.extend({
         this.scheduleUpdate();
         this.backgroundLayer = new cc.LayerColor(cc.color(0, 0, 0, 255));
         //this.backgroundLayer = new BackgroundLayer();
-        this.actionLayer = new TestCakeCombinedLayer();
+        this.actionLayer = new BreadLayer();
         this.statusLayer = new StatusLayer();
 
         this.actionLayer.setStatusLayer(this.statusLayer);
