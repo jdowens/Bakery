@@ -15,6 +15,7 @@ var res = {
     red_button10_png : "res/UI/red_button10.png",
     red_button13_png : "res/UI/red_button13.png",
     red_sliderDown_png : "res/UI/red_sliderDown.png",
+    ovenBarBackground_png : "res/UI/ovenBarBackground.png",
     bread_png : "res/Bread/bread.png",
     bread_plist : "res/Bread/bread.plist",
     // Menu Pictures
@@ -50,6 +51,7 @@ var g_resources = [
     res.red_button10_png,
     res.red_button13_png,
     res.red_sliderDown_png,
+    res.ovenBarBackground_png,
     res.bread_png,
     res.bread_plist,
     // Menu Pictures

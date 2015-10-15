@@ -40,9 +40,8 @@ var BreadLayer = cc.Layer.extend({
     onOvenRequest:function(position) {
         var rect = this.ovenSprite.getBoundingBoxToWorld();
         if (!this.ovenSprite.available && cc.rectContainsPoint(rect, position)) {
-            var perror = this.ovenSprite.removeFood();
-            this.ovenCakeValue = Math.floor((1-perror)*this.ovenCakeValue);
-            if (this.ovenCakeValue < 0)
+            var status = this.ovenSprite.removeFood();
+            if (status != Oven.FoodStatus.COOKED)
                 this.ovenCakeValue = 0;
             this.onFinish();
         }
