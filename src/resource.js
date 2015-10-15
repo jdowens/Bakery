@@ -18,18 +18,18 @@ var res = {
     bread_png : "res/Bread/bread.png",
     bread_plist : "res/Bread/bread.plist",
     // Menu Pictures
-    Pictures_Menu_stdPlay_png : "res/Pictures/Menu/stdPlay.png",
-    Pictures_Menu_actPlay_png : "res/Pictures/Menu/actPlay.png",
-    Pictures_Menu_stdHiScores_png : "res/Pictures/Menu/stdHiScores.png",
-    Pictures_Menu_actHiScores_png : "res/Pictures/Menu/actHiScores.png",
-    Pictures_Menu_stdDirections_png : "res/Pictures/Menu/stdDirections.png",
-    Pictures_Menu_actDirections_png : "res/Pictures/Menu/actDirections.png",
-    Pictures_Menu_stdOptions_png : "res/Pictures/Menu/stdOptions.png",
-    Pictures_Menu_actOptions_png : "res/Pictures/Menu/actOptions.png",
-    Pictures_Menu_stdExit_png : "res/Pictures/Menu/stdExit.png",
-    Pictures_Menu_actExit_png : "res/Pictures/Menu/actExit.png",
-    Pictures_Menu_stdReturn_png : "res/Pictures/Menu/stdReturn.png",
-    Pictures_Menu_actReturn_png : "res/Pictures/Menu/actReturn.png"
+    Pictures_Menu_stdPlay_png : "res/UI/stdPlay.png",
+    Pictures_Menu_actPlay_png : "res/UI/actPlay.png",
+    Pictures_Menu_stdHiScores_png : "res/UI/stdHiScores.png",
+    Pictures_Menu_actHiScores_png : "res/UI/actHiScores.png",
+    Pictures_Menu_stdDirections_png : "res/UI/stdDirections.png",
+    Pictures_Menu_actDirections_png : "res/UI/actDirections.png",
+    Pictures_Menu_stdOptions_png : "res/UI/stdOptions.png",
+    Pictures_Menu_actOptions_png : "res/UI/actOptions.png",
+    Pictures_Menu_stdExit_png : "res/UI/stdExit.png",
+    Pictures_Menu_actExit_png : "res/UI/actExit.png",
+    Pictures_Menu_stdReturn_png : "res/UI/stdReturn.png",
+    Pictures_Menu_actReturn_png : "res/UI/actReturn.png"
 
 };
 
