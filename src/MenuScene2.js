@@ -43,26 +43,26 @@ var MenuLayer2 = cc.Layer.extend({
         cc.MenuItemFont.setFontSize(60);            // What does this do?
 
         var menuItemPlay = new cc.MenuItemSprite(           // Create button 1 : Play
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
+            new cc.Sprite(res.Pictures_Menu_stdPlay_png),
+            new cc.Sprite(res.Pictures_Menu_actPlay_png),
             this.onPlay, this);
 
         var play = new cc.Menu(menuItemPlay);               // Menu container for button 1
         play.setPosition(playPos);
         this.addChild(play);
 
-        var menuItemContinue = new cc.MenuItemSprite(       // Create button 2: Continue
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
-            this.onContinue, this);
+        var menuItemHiScores = new cc.MenuItemSprite(       // Create button 2: HiScores
+            new cc.Sprite(res.Pictures_Menu_stdHiScores_png),
+            new cc.Sprite(res.Pictures_Menu_actHiScores_png),
+            this.onHiScores, this);
 
-        var cont = new cc.Menu(menuItemContinue);           // Menu container for button 2
+        var cont = new cc.Menu(menuItemHiScores);           // Menu container for button 2
         cont.setPosition(contPos);
         this.addChild(cont);
 
         var menuItemDirections = new cc.MenuItemSprite(       // Create button 3: Directions
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
+            new cc.Sprite(res.Pictures_Menu_stdDirections_png),
+            new cc.Sprite(res.Pictures_Menu_actDirections_png),
             this.onDirections, this);
 
         var drcs = new cc.Menu(menuItemDirections);           // Menu container for button 3
@@ -70,8 +70,8 @@ var MenuLayer2 = cc.Layer.extend({
         this.addChild(drcs);
 
         var menuItemOptions = new cc.MenuItemSprite(        // Options
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
+            new cc.Sprite(res.Pictures_Menu_stdOptions_png),
+            new cc.Sprite(res.Pictures_Menu_actOptions_png),
             this.onOptions, this);
 
         var opt = new cc.Menu(menuItemOptions);            // Menu container
@@ -79,8 +79,8 @@ var MenuLayer2 = cc.Layer.extend({
         this.addChild(opt);
 
         var menuMenuExit = new cc.MenuItemSprite(           // Exit
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
+            new cc.Sprite(res.Pictures_Menu_stdExit_png),
+            new cc.Sprite(res.Pictures_Menu_actExit_png),
             this.onMenuExit, this);
 
         var exit = new cc.Menu(menuMenuExit);               // Menu container
@@ -93,8 +93,8 @@ var MenuLayer2 = cc.Layer.extend({
         cc.director.runScene(new PlayScene());
     },
 
-    onContinue:function() {
-        cc.log("You clicked the continue button, good job...");
+    onHiScores:function() {
+        cc.log("You clicked the hi scores button, good job...");
         window.open("http://dropthenet.com/hiscores.html");
         //cc.director.runScene(new HiScoreScene());
     },

@@ -16,7 +16,21 @@ var res = {
     red_button13_png : "res/UI/red_button13.png",
     red_sliderDown_png : "res/UI/red_sliderDown.png",
     bread_png : "res/Bread/bread.png",
-    bread_plist : "res/Bread/bread.plist"
+    bread_plist : "res/Bread/bread.plist",
+    // Menu Pictures
+    Pictures_Menu_stdPlay_png : "res/Pictures/Menu/stdPlay.png",
+    Pictures_Menu_actPlay_png : "res/Pictures/Menu/actPlay.png",
+    Pictures_Menu_stdHiScores_png : "res/Pictures/Menu/stdHiScores.png",
+    Pictures_Menu_actHiScores_png : "res/Pictures/Menu/actHiScores.png",
+    Pictures_Menu_stdDirections_png : "res/Pictures/Menu/stdDirections.png",
+    Pictures_Menu_actDirections_png : "res/Pictures/Menu/actDirections.png",
+    Pictures_Menu_stdOptions_png : "res/Pictures/Menu/stdOptions.png",
+    Pictures_Menu_actOptions_png : "res/Pictures/Menu/actOptions.png",
+    Pictures_Menu_stdExit_png : "res/Pictures/Menu/stdExit.png",
+    Pictures_Menu_actExit_png : "res/Pictures/Menu/actExit.png",
+    Pictures_Menu_stdReturn_png : "res/Pictures/Menu/stdReturn.png",
+    Pictures_Menu_actReturn_png : "res/Pictures/Menu/actReturn.png"
+
 };
 
 var g_resources = [
@@ -37,5 +51,19 @@ var g_resources = [
     res.red_button13_png,
     res.red_sliderDown_png,
     res.bread_png,
-    res.bread_plist
+    res.bread_plist,
+    // Menu Pictures
+    res.Pictures_Menu_stdPlay_png,
+    res.Pictures_Menu_actPlay_png,
+    res.Pictures_Menu_stdHiScores_png,
+    res.Pictures_Menu_actHiScores_png,
+    res.Pictures_Menu_stdDirections_png,
+    res.Pictures_Menu_actDirections_png,
+    res.Pictures_Menu_stdOptions_png,
+    res.Pictures_Menu_actOptions_png,
+    res.Pictures_Menu_stdExit_png,
+    res.Pictures_Menu_actExit_png,
+    res.Pictures_Menu_stdReturn_png,
+    res.Pictures_Menu_actReturn_png
+
 ];

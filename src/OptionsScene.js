@@ -26,11 +26,11 @@ var OptionsLayer = cc.Layer.extend({
         // set menu item font size
         cc.MenuItemFont.setFontSize(60);
 
-        // create button
+        // create button for return to main menu
         var menuItemPlay = new cc.MenuItemSprite(
-            new cc.Sprite(res.start_n_png),
-            new cc.Sprite(res.start_s_png),
-            this.onPlay, this);
+            new cc.Sprite(res.Pictures_Menu_stdReturn_png),
+            new cc.Sprite(res.Pictures_Menu_actReturn_png),
+            this.onReturn, this);
         // create menu container and add button to menu
         var menu = new cc.Menu(menuItemPlay);
         menu.setPosition(cc.p(centerpos.x, centerpos.y - 200));
@@ -65,7 +65,7 @@ var OptionsLayer = cc.Layer.extend({
     },
 
     // callback for the play button
-    onPlay:function() {
+    onReturn:function() {
         cc.director.runScene(new MenuScene2());
     },
 
