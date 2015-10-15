@@ -89,27 +89,32 @@ var MenuLayer2 = cc.Layer.extend({
     },
 
     onPlay:function(){                                          // These show that the different buttons are activated
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.log("You clicked the play button, good job...");
         cc.director.runScene(new PlayScene());
     },
 
     onHiScores:function() {
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.log("You clicked the hi scores button, good job...");
         window.open("http://dropthenet.com/hiscores.html");
         //cc.director.runScene(new HiScoreScene());
     },
 
     onDirections:function() {
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.log("You clicked the directions button, good job...");
     },
 
     onOptions:function(){
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.log("You clicked the options button, good job...");
         cc.director.runScene(new OptionsScene());
     },
 
     onMenuExit:function() {
         cc.log("You clicked the exit button, good job...");
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         window.location.replace("http://dropthenet.com/index.php/cute-bakery/");
     }
 });

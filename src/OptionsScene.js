@@ -64,8 +64,9 @@ var OptionsLayer = cc.Layer.extend({
         this.addChild(text2);
     },
 
-    // callback for the play button
+    // callback for the return button
     onReturn:function() {
+        cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.director.runScene(new MenuScene2());
     },
 
