@@ -4,10 +4,13 @@ var Oven = cc.Sprite.extend({
     statusBarBackground:null,
     elapsedTime:0,
     requiredTime:0,
+    finishedBakingCallback:null,
 
-    ctor:function(resource) {
+    ctor:function(resource, caller, finishedBakingCallback) {
         this._super(resource);
-
+        var cb = finishedBakingCallback.bind(caller);
+        this.finishedBakingCallback = cb;
+        this.setupMouseCallbacks();
         this.statusBarBackground = new cc.Sprite(res.ovenBarBackground_png);
         var rect = this.getBoundingBoxToWorld();
         cc.log(rect.x, rect.y, rect.width, rect.height);
@@ -24,6 +27,25 @@ var Oven = cc.Sprite.extend({
         this.statusBarBackground.addChild(this.statusBar);
 
         this.statusBar.setPercentage(0);
+    },
+
+    setupMouseCallbacks:function() {
+        var listener = cc.EventListener.create({
+            event:cc.EventListener.MOUSE,
+            onMouseDown:function(event) {
+                var target = event.getCurrentTarget();
+                target.onOvenRequest(event.getLocation());
+            }
+        });
+        cc.eventManager.addListener(listener, this);
+    },
+
+    onOvenRequest:function(position) {
+        var rect = this.getBoundingBoxToWorld();
+        if (!this.available && cc.rectContainsPoint(rect, position)) {
+            var status = this.removeFood();
+            this.finishedBakingCallback(status);
+        }
     },
 
     startBaking:function(requiredTime) {

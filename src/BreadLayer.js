@@ -20,13 +20,13 @@ var BreadLayer = cc.Layer.extend({
     init:function() {
         this._super();
         this.scheduleUpdate();
-        this.setupMouseCallbacks();
+        //this.setupMouseCallbacks();
         this.setupTestQueue();
         this.setupGraphics();
         this.nextPattern();
     },
 
-    setupMouseCallbacks:function() {
+    /*setupMouseCallbacks:function() {
         var listener = cc.EventListener.create({
             event:cc.EventListener.MOUSE,
             onMouseDown:function(event) {
@@ -45,6 +45,12 @@ var BreadLayer = cc.Layer.extend({
                 this.ovenCakeValue = 0;
             this.onFinish();
         }
+    },*/
+
+    onOvenFinished:function(status) {
+        if (status != Oven.FoodStatus.COOKED)
+            this.ovenCakeValue = 0;
+        this.onFinish();
     },
 
     setupTestQueue:function() {
@@ -94,7 +100,7 @@ var BreadLayer = cc.Layer.extend({
 
     setupGraphics:function() {
         // setup graphics
-        this.ovenSprite = new Oven(res.oven_png);
+        this.ovenSprite = new Oven(res.oven_png, this, this.onOvenFinished);
         this.addChild(this.ovenSprite);
         //this.ovenSprite.attr({x:cc.director.getWinSize().width - this.ovenSprite.getTextureRect().width / 2,
         //    y: cc.director.getWinSize().height / 2});
