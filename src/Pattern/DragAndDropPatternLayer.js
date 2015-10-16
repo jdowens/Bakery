@@ -1,7 +1,6 @@
 var DragAndDropPatternLayer = Pattern.extend({
     spriteTarget:null,
     spriteDestination:null,
-    actionLayer:null,
     selected:false,
     drugFrom:null,
 

@@ -1,9 +1,9 @@
 var Pattern = cc.Layer.extend({
     finished:false,
     listener:null,
-    actionLayer:null,
     onProgressVector:null,
     onCompletionVector:null,
+    value:0,
 
     ctor:function() {
         this._super();
@@ -21,8 +21,8 @@ var Pattern = cc.Layer.extend({
         this.onCompletionVector.push(boundFunc);
     },
 
-    onStart:function(layer) {
-        this.actionLayer = layer;
+    onStart:function() {
+
     },
 
     onProgress:function() {
