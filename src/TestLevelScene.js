@@ -8,13 +8,13 @@ var TestLevelScene = cc.Layer.extend({
     },
 
     init:function() {
-        this.foodLayer = new FoodLayer(res.bread_png);
-        this.addChild(this.foodLayer);
-
         this.oven = new Oven(res.oven_png);
         this.oven.attr({x:cc.director.getWinSize().width - this.oven.statusBar.getSprite().getBoundingBoxToWorld().width,
             y: cc.director.getWinSize().height / 2});
         this.addChild(this.oven);
+
+        this.foodLayer = new FoodLayer(res.bread_png);
+        this.addChild(this.foodLayer);
 
         var testPattern = new MultiClickPatternLayer(true, res.testcakepattern3_png, 2, cc.p(0,0));
         testPattern.addOnProgressAction(this.foodLayer, function() {
