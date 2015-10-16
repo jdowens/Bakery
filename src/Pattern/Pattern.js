@@ -18,7 +18,7 @@ var Pattern = cc.Layer.extend({
 
     addOnCompletionAction:function(caller, func) {
         var boundFunc = func.bind(caller);
-        this.onCompletionVector.push(caller);
+        this.onCompletionVector.push(boundFunc);
     },
 
     onStart:function(layer) {

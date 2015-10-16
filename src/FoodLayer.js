@@ -7,6 +7,7 @@ var FoodLayer = cc.Layer.extend({
     patternQueue:null,
     foodQueue:null,
     currentPattern:null,
+    finished:false,
 
     ctor:function(foodGraphic) {
         this._super();
@@ -14,7 +15,6 @@ var FoodLayer = cc.Layer.extend({
     },
 
     init:function(foodGraphic) {
-        this.scheduleUpdate();
         this.setupGraphics(foodGraphic);
         this.setupQueues();
     },
@@ -22,8 +22,6 @@ var FoodLayer = cc.Layer.extend({
     setupGraphics:function(foodGraphic) {
         this.spriteSheet = new cc.SpriteBatchNode(foodGraphic);
         this.addChild(this.spriteSheet);
-        this.foodSprite = new cc.Sprite();
-        this.spriteSheet.addChild(this.foodSprite);
     },
 
     setupQueues:function() {
@@ -40,9 +38,14 @@ var FoodLayer = cc.Layer.extend({
     },
 
     nextPattern:function() {
-        this.currentPattern = this.patternQueue.shift();
-        this.addChild(this.currentPattern);
-        this.currentPattern.onStart(this);
+        if (this.patternQueue.length > 0) {
+            this.currentPattern = this.patternQueue.shift();
+            this.addChild(this.currentPattern);
+            this.currentPattern.onStart(this);
+        }
+        else {
+            this.finished = true;
+        }
     },
 
     advanceFood:function() {
@@ -52,20 +55,31 @@ var FoodLayer = cc.Layer.extend({
     },
 
     onStart:function() {
-        this.foodSprite.setFrame(this.foodQueue.shift());
-        this.foodSprite.setPosition(cc.p(100, cc.director.getWinSize().y / 2));
+        this.scheduleUpdate();
+        this.foodSprite = cc.Sprite.create(cc.spriteFrameCache.getSpriteFrame(this.foodQueue.shift()));
+        //this.foodSprite.attr({x:100, y:cc.director.getWinSize().height / 2});
+        this.spriteSheet.addChild(this.foodSprite);
+        this.spriteSheet.attr({x:100, y:cc.director.getWinSize().height / 2});
         this.nextPattern();
     },
 
     update:function(dt) {
-        if (this.currentPattern != null && this.currentPattern.isFinsihed()) {
+        if (this.currentPattern != null && this.currentPattern.isFinished()) {
             if (this.currentPattern.advancesFood) {
                 this.advanceFood();
             }
             this.currentPattern.onFinish();
             this.removeChild(this.currentPattern);
-            delete this.currentPattern();
+            delete this.currentPattern;
             this.nextPattern();
         }
+    },
+
+    onFinish:function() {
+        cc.log("Food completed");
+    },
+
+    isFinished:function() {
+        return this.finished;
     }
 });

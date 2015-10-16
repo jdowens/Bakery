@@ -31,6 +31,8 @@
         "src/Pattern/ClickAndHoldPatternLayer.js",
         "src/Pattern/DragAndDropPatternLayer.js",
         "src/Pattern/DrawLinesPatternLayer.js",
-        "src/Pattern/MultiClickPatternLayer.js"
+        "src/Pattern/MultiClickPatternLayer.js",
+        "src/TestLevelScene.js",
+        "src/FoodLayer.js"
     ]
 }
