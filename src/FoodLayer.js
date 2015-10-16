@@ -41,7 +41,7 @@ var FoodLayer = cc.Layer.extend({
         if (this.patternQueue.length > 0) {
             this.currentPattern = this.patternQueue.shift();
             this.addChild(this.currentPattern);
-            this.currentPattern.onStart(this);
+            this.currentPattern.onStart(this.spriteSheet.getPosition());
         }
         else {
             this.finished = true;

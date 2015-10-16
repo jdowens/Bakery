@@ -16,7 +16,7 @@ var TestLevelScene = cc.Layer.extend({
             y: cc.director.getWinSize().height / 2});
         this.addChild(this.oven);
 
-        var testPattern = new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 2, cc.p(0,0));
+        var testPattern = new MultiClickPatternLayer(true, res.testcakepattern3_png, 2, cc.p(0,0));
         testPattern.addOnProgressAction(this.foodLayer, function() {
             this.spriteSheet.runAction(new SpriteShake(0.2, 3, 3));
         });
