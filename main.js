@@ -62,7 +62,7 @@ cc.game.onStart = function(){
     cc.audioEngine.playMusic("res/Music/Engineering.mp3", true);
     cc.audioEngine.setMusicVolume(0.2);
     cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new MenuScene2());
+        cc.director.runScene(new TestLevelScene());
     }, this);
 };
 cc.game.run();
