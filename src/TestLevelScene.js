@@ -21,6 +21,13 @@ var TestLevelScene = cc.Layer.extend({
         this.ovens.push(oven);
         this.ovens.push(oven2);
 
+        cc.spriteFrameCache.addSpriteFrames(res.bread_plist);
+
+        this.setupQueue();
+        this.scheduleUpdate();
+    },
+
+    setupQueue:function() {
         this.foodLayer = new FoodLayer(res.bread_png);
         this.addChild(this.foodLayer);
 
@@ -54,14 +61,13 @@ var TestLevelScene = cc.Layer.extend({
 
         var testPatternThree = new DragToOvenPatternLayer(this.foodLayer.spriteSheet, this.ovens);
 
-        cc.spriteFrameCache.addSpriteFrames(res.bread_plist);
         this.foodLayer.addPatternToQueue(testPattern);
         this.foodLayer.addPatternToQueue(testPatternTwo);
         this.foodLayer.addPatternToQueue(testPatternThree);
         this.foodLayer.addFoodToQueue("bread1.png");
         this.foodLayer.addFoodToQueue("bread2.png");
         this.foodLayer.addFoodToQueue("bread3.png");
-        this.scheduleUpdate();
+
         this.foodLayer.onStart();
     },
 
@@ -70,6 +76,7 @@ var TestLevelScene = cc.Layer.extend({
             this.foodLayer.onFinish();
             this.removeChild(this.foodLayer);
             delete this.foodLayer;
+            this.setupQueue();
         }
     },
 
