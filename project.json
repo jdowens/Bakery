@@ -33,6 +33,7 @@
         "src/Pattern/DrawLinesPatternLayer.js",
         "src/Pattern/MultiClickPatternLayer.js",
         "src/TestLevelScene.js",
-        "src/FoodLayer.js"
+        "src/FoodLayer.js",
+        "src/Pattern/DragToOvenPatternLayer.js"
     ]
 }

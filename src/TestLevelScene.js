@@ -1,7 +1,6 @@
 var TestLevelScene = cc.Layer.extend({
     foodLayer:null,
-    oven:null,
-    oven2:null,
+    ovens:null,
 
     onEnter:function() {
         this._super();
@@ -9,15 +8,18 @@ var TestLevelScene = cc.Layer.extend({
     },
 
     init:function() {
-        this.oven = new Oven(res.oven_png, this, this.ovenDone);
-        this.oven.attr({x:cc.director.getWinSize().width - this.oven.statusBar.getSprite().getBoundingBoxToWorld().width,
+        this.ovens = [];
+        var oven = new Oven(res.oven_png, this, this.ovenDone);
+        oven.attr({x:cc.director.getWinSize().width - oven.statusBar.getSprite().getBoundingBoxToWorld().width,
             y: cc.director.getWinSize().height / 2});
-        this.addChild(this.oven);
+        this.addChild(oven);
 
-        this.oven2 = new Oven(res.oven_png, this, this.ovenDone);
-        this.oven2.attr({x:cc.director.getWinSize().width / 2,
+        var oven2 = new Oven(res.oven_png, this, this.ovenDone);
+        oven2.attr({x:cc.director.getWinSize().width / 2,
             y: 100});
-        this.addChild(this.oven2);
+        this.addChild(oven2);
+        this.ovens.push(oven);
+        this.ovens.push(oven2);
 
         this.foodLayer = new FoodLayer(res.bread_png);
         this.addChild(this.foodLayer);
@@ -50,7 +52,7 @@ var TestLevelScene = cc.Layer.extend({
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
         });
 
-        var testPatternThree = new DragAndDropPatternLayer(this.foodLayer.spriteSheet, this.oven2);
+        var testPatternThree = new DragToOvenPatternLayer(this.foodLayer.spriteSheet, this.ovens);
 
         cc.spriteFrameCache.addSpriteFrames(res.bread_plist);
         this.foodLayer.addPatternToQueue(testPattern);
