@@ -32,8 +32,8 @@ var MultiClickPatternLayer = Pattern.extend({
     },
 
     setupPatternSpritePosition:function(spritePos) {
-        var x = spritePos.x;
-        var y = spritePos.y;
+        var x = spritePos.x + this.offsetFromFood.x;
+        var y = spritePos.y + this.offsetFromFood.y;
         this.patternSprite.setPosition(cc.p(x,y));
     },
 
