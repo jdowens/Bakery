@@ -43,7 +43,7 @@ var OptionsLayer = cc.Layer.extend({
         slider.setEnabled(true);
         slider.setMinimumAllowedValue(0);
         slider.setMaximumValue(1);
-        slider.setValue(1);
+        slider.setValue(cc.audioEngine.getMusicVolume());
         slider.addTargetWithActionForControlEvents(this, this.onMusicValueChanged, cc.CONTROL_EVENT_VALUECHANGED);
         this.addChild(slider);
         var text = new cc.LabelTTF("Music: ", "Helvetica", 30);
@@ -56,7 +56,7 @@ var OptionsLayer = cc.Layer.extend({
         slider2.setEnabled(true);
         slider2.setMinimumAllowedValue(0);
         slider2.setMaximumValue(1);
-        slider2.setValue(1);
+        slider2.setValue(cc.audioEngine.getEffectsVolume());
         slider2.addTargetWithActionForControlEvents(this, this.onSFXValueChanged, cc.CONTROL_EVENT_VALUECHANGED);
         this.addChild(slider2);
         var text2 = new cc.LabelTTF("SFX: ", "Helvetica", 30);

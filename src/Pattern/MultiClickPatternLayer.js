@@ -100,18 +100,19 @@ var MultiClickPatternLayer = Pattern.extend({
         var rect = this.patternSprite.getBoundingBoxToWorld();
         if (cc.rectContainsPoint(rect, point)) {
             this.remainingClicks--;
-            this.actionLayer.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));
+            //this.actionLayer.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));
+            this.onProgress();
             this.setupPatternSpriteOpacities();
             if (this.remainingClicks == 0) {
                 this.finished = true;
             }
-            var sfx_index = Math.floor(Math.random()*3);
+            /*var sfx_index = Math.floor(Math.random()*3);
             if (sfx_index == 0)
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
             else if (sfx_index == 1)
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
             else if (sfx_index == 2)
-                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);*/
         }
         else {
             //cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);

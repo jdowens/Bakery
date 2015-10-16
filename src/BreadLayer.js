@@ -40,18 +40,29 @@ var BreadLayer = cc.Layer.extend({
     onOvenRequest:function(position) {
         var rect = this.ovenSprite.getBoundingBoxToWorld();
         if (!this.ovenSprite.available && cc.rectContainsPoint(rect, position)) {
-            var perror = this.ovenSprite.removeFood();
-            this.ovenCakeValue = Math.floor((1-perror)*this.ovenCakeValue);
-            if (this.ovenCakeValue < 0)
+            var status = this.ovenSprite.removeFood();
+            if (status != Oven.FoodStatus.COOKED)
                 this.ovenCakeValue = 0;
             this.onFinish();
         }
     },
 
     setupTestQueue:function() {
-
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(30, 0)));
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(-30, 0)));
+        var testPattern = new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(30, 0));
+        testPattern.addOnProgressAction(this, function() {this.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));});
+        testPattern.addOnProgressAction(this, function() {
+            var sfx_index = Math.floor(Math.random()*3);
+            if (sfx_index == 0)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
+            else if (sfx_index == 1)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
+            else if (sfx_index == 2)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
+        });
+        this.patternQueue.push(testPattern);
+        var anotherTestPattern = new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(-30, 0));
+        anotherTestPattern.addOnProgressAction(this, function() {this.spriteBatch.runAction(new SpriteShake(1.0, 10, 10));});
+        this.patternQueue.push(anotherTestPattern);
         this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(0, 0)));
 
         this.patternQueue.push(new ClickAndHoldPatternLayer(false, false, true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
@@ -61,10 +72,8 @@ var BreadLayer = cc.Layer.extend({
 
         for (var i = 1; i <= 8; i++)
         {
-            cc.log("bread" + i + "png");
             this.foodQueue.push("bread" + i + ".png");
         }
-        //this.foodQueue.push("bread10.png");
     },
 
     nextPattern:function() {
