@@ -73,7 +73,7 @@ var BreadLayer = cc.Layer.extend({
 
         this.patternQueue.push(new ClickAndHoldPatternLayer(true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
         for (var i = 0; i < 3; i++) {
-            var dlp = new DrawLinesPatternLayer(1, 10, res.testcakepattern3_png, true, cc.p(-50 + i*50, 0));
+            var dlp = new DrawLinesPatternLayer(1, 10, res.testcakepattern4_png, true, cc.p(-50 + i*50, 0));
             dlp.addOnCompletionAction(this, function() {
                 this.spriteBatch.runAction(new SpriteFunctionPath(0.3, new Function("return 0"),
                     new Function("t", "return 10*Math.sin(4*t*Math.PI + Math.PI)"), true));
