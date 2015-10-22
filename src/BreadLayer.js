@@ -20,13 +20,13 @@ var BreadLayer = cc.Layer.extend({
     init:function() {
         this._super();
         this.scheduleUpdate();
-        this.setupMouseCallbacks();
+        //this.setupMouseCallbacks();
         this.setupTestQueue();
         this.setupGraphics();
         this.nextPattern();
     },
 
-    setupMouseCallbacks:function() {
+    /*setupMouseCallbacks:function() {
         var listener = cc.EventListener.create({
             event:cc.EventListener.MOUSE,
             onMouseDown:function(event) {
@@ -40,38 +40,58 @@ var BreadLayer = cc.Layer.extend({
     onOvenRequest:function(position) {
         var rect = this.ovenSprite.getBoundingBoxToWorld();
         if (!this.ovenSprite.available && cc.rectContainsPoint(rect, position)) {
-            var perror = this.ovenSprite.removeFood();
-            this.ovenCakeValue = Math.floor((1-perror)*this.ovenCakeValue);
-            if (this.ovenCakeValue < 0)
+            var status = this.ovenSprite.removeFood();
+            if (status != Oven.FoodStatus.COOKED)
                 this.ovenCakeValue = 0;
             this.onFinish();
         }
+    },*/
+
+    onOvenFinished:function(status) {
+        if (status != Oven.FoodStatus.COOKED)
+            this.ovenCakeValue = 0;
+        this.onFinish();
     },
 
     setupTestQueue:function() {
+        var testPattern = new MultiClickPatternLayer(true, res.testcakepattern3_png, 1, cc.p(30, 0));
+        testPattern.addOnProgressAction(this, function() {this.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));});
+        testPattern.addOnProgressAction(this, function() {
+            var sfx_index = Math.floor(Math.random()*3);
+            if (sfx_index == 0)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
+            else if (sfx_index == 1)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
+            else if (sfx_index == 2)
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
+        });
+        this.patternQueue.push(testPattern);
+        var anotherTestPattern = new MultiClickPatternLayer(true, res.testcakepattern3_png, 1, cc.p(-30, 0));
+        anotherTestPattern.addOnProgressAction(this, function() {this.spriteBatch.runAction(new SpriteShake(1.0, 10, 10));});
+        this.patternQueue.push(anotherTestPattern);
+        this.patternQueue.push(new MultiClickPatternLayer(true, res.testcakepattern3_png, 1, cc.p(0, 0)));
 
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(30, 0)));
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(-30, 0)));
-        this.patternQueue.push(new MultiClickPatternLayer(false, false, true, res.testcakepattern3_png, 1, cc.p(0, 0)));
-
-        this.patternQueue.push(new ClickAndHoldPatternLayer(false, false, true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
+        this.patternQueue.push(new ClickAndHoldPatternLayer(true, 200, res.testcakepattern3_png, res.testcakepattern4_png, 0.5, cc.p(0, 0)));
         for (var i = 0; i < 3; i++) {
-            this.patternQueue.push(new DrawLinesPatternLayer(1, 10, res.testcakepattern3_png, true, cc.p(-50 + i*50, 0)));
+            var dlp = new DrawLinesPatternLayer(1, 10, res.testcakepattern3_png, true, cc.p(-50 + i*50, 0));
+            dlp.addOnCompletionAction(this, function() {
+                this.spriteBatch.runAction(new SpriteFunctionPath(0.3, new Function("return 0"),
+                    new Function("t", "return 10*Math.sin(4*t*Math.PI + Math.PI)"), true));
+            })
+            this.patternQueue.push(dlp);
         }
 
         for (var i = 1; i <= 8; i++)
         {
-            cc.log("bread" + i + "png");
             this.foodQueue.push("bread" + i + ".png");
         }
-        //this.foodQueue.push("bread10.png");
     },
 
     nextPattern:function() {
         if (this.patternQueue.length > 0) {
             this.currentPattern = this.patternQueue.shift();
             this.addChild(this.currentPattern);
-            this.currentPattern.onStart(this);
+            this.currentPattern.onStart(this.foodSprite.getPosition());
         }
         else {
             this.onPlaceInOven();
@@ -80,7 +100,7 @@ var BreadLayer = cc.Layer.extend({
 
     setupGraphics:function() {
         // setup graphics
-        this.ovenSprite = new Oven(res.oven_png);
+        this.ovenSprite = new Oven(res.oven_png, this, this.onOvenFinished);
         this.addChild(this.ovenSprite);
         //this.ovenSprite.attr({x:cc.director.getWinSize().width - this.ovenSprite.getTextureRect().width / 2,
         //    y: cc.director.getWinSize().height / 2});
@@ -105,7 +125,8 @@ var BreadLayer = cc.Layer.extend({
             if (this.currentPattern.advancesFood)
                 this.advanceFood();
             this.currentPattern.onFinish();
-            cc.log(this.curCakeValue);
+            this.ovenCakeValue += this.currentPattern.value;
+            cc.log(this.ovenCakeValue);
             this.removeChild(this.currentPattern);
             delete this.currentPattern;
             this.nextPattern();
@@ -137,8 +158,8 @@ var BreadLayer = cc.Layer.extend({
     },
 
     onPlaceInOven:function() {
-        this.ovenCakeValue = this.curCakeValue;
-        this.curCakeValue = 0;
+        //this.ovenCakeValue = this.curCakeValue;
+        //this.curCakeValue = 0;
         this.foodSprite.attr({x:this.ovenSprite.statusBar.getSprite().getBoundingBoxToWorld().width,y:cc.director.getWinSize().height/2});
         this.setupTestQueue();
         this.resetGraphics();

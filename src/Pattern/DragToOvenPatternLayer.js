@@ -1,13 +1,14 @@
-var DragAndDropPatternLayer = Pattern.extend({
+var DragToOvenPatternLayer = Pattern.extend({
     spriteTarget:null,
-    spriteDestination:null,
+    ovenDestinations:null,
     selected:false,
     drugFrom:null,
+    selectedIndex:0,
 
-    ctor:function(spriteTarget, spriteDestination) {
+    ctor:function(spriteTarget, ovenDestinations) {
         this._super();
         this.spriteTarget = spriteTarget;
-        this.spriteDestination = spriteDestination;
+        this.ovenDestinations = ovenDestinations;
     },
 
     onStart:function(layer) {
@@ -76,22 +77,24 @@ var DragAndDropPatternLayer = Pattern.extend({
     },
 
     onDragEnd:function(pos) {
-        var rect = this.spriteDestination.getBoundingBoxToWorld();
-        if (this.selected && cc.rectContainsPoint(rect, pos)) {
-            if (this.spriteDestination.available) {
-                cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
-                this.finished = true;
-            }
-            else {
-                this.spriteTarget.setPosition(this.drugFrom);
+        for (var i = 0; i < this.ovenDestinations.length; i++) {
+            var rect = this.ovenDestinations[i].getBoundingBoxToWorld();
+            if (this.selected && cc.rectContainsPoint(rect, pos)) {
+                if (this.ovenDestinations[i].available) {
+                    cc.audioEngine.playEffect("res/SFX/Powerup18.wav", false);
+                    this.finished = true;
+                    this.selectedIndex = i;
+                    break;
+                }
             }
         }
+        this.spriteTarget.setPosition(this.drugFrom);
         this.selected = false;
     },
 
     onFinish:function() {
         this._super();
-        this.spriteDestination.startBaking(Math.random() + 2.0);
+        this.ovenDestinations[this.selectedIndex].startBaking(Math.random() + 2.0);
     },
 
     isFinished:function() {

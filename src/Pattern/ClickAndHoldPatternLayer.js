@@ -9,23 +9,18 @@ var ClickAndHoldPatternLayer = Pattern.extend({
     requiredHoldTime:0,
     remainingHoldTime:0,
     selected:false,
-    holdTimeRandom:false,
-    positionRandom:false,
     offsetFromFood:null,
-    actionLayer:null,
     advancesFood:false,
 
-    ctor:function(holdTimeRandom, positionRandom, advancesFood, max_gold, patternSpriteResource,
+    ctor:function(advancesFood, max_gold, patternSpriteResource,
                   patternOutlineSpriteResource, requiredHoldTime, offsetFromFood) {
         this._super();
-        this.holdTimeRandom = holdTimeRandom;
-        this.patternPositionRandom = positionRandom;
         this.advancesFood = advancesFood;
         this.max_gold = max_gold;
         this.requiredHoldTime = requiredHoldTime;
         this.remainingHoldTime = requiredHoldTime;
         this.offsetFromFood = offsetFromFood;
-        this.setupHoldTime();
+        //this.setupHoldTime();
         this.setupPatternSprite(patternSpriteResource, patternOutlineSpriteResource);
     },
 
@@ -43,21 +38,11 @@ var ClickAndHoldPatternLayer = Pattern.extend({
         this.addChild(this.patternOutlineSprite);
     },
 
-    setupPatternSpritePosition:function() {
-        if (!this.patternPositionRandom) {
-            var foodPos = this.actionLayer.foodSprite.getPosition();
-            var x = foodPos.x + this.offsetFromFood.x;
-            var y = foodPos.y + this.offsetFromFood.y;
+    setupPatternSpritePosition:function(spritePos) {
+            var x = spritePos.x + this.offsetFromFood.x;
+            var y = spritePos.y + this.offsetFromFood.y;
             this.patternSprite.setPosition(cc.p(x,y));
             this.patternOutlineSprite.setPosition(cc.p(x,y));
-        }
-        else {
-            var foodSprite = this.actionLayer.foodSprite;
-            var x = foodSprite.getPosition().x + ((Math.random() - 0.5)*(foodSprite.getTextureRect().width - this.patternSprite.getTextureRect().width));
-            var y = foodSprite.getPosition().y + ((Math.random() - 0.5)*(foodSprite.getTextureRect().height - this.patternSprite.getTextureRect().height));
-            this.patternSprite.attr({x:x,y:y});
-            this.patternOutlineSprite.attr({x:x,y:y});
-        }
     },
 
     setupPatternSize:function() {
@@ -67,11 +52,11 @@ var ClickAndHoldPatternLayer = Pattern.extend({
         this.patternOutlineSprite.setScale(percent, percent);
     },
 
-    onStart:function(layer) {
-        this._super(layer);
+    onStart:function(spritePos) {
+        this._super();
         this.scheduleUpdate();
         this.setupPatternSize();
-        this.setupPatternSpritePosition();
+        this.setupPatternSpritePosition(spritePos);
         if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
         }
@@ -145,10 +130,11 @@ var ClickAndHoldPatternLayer = Pattern.extend({
 
     onFinish:function() {
         this._super();
-        var value = this.max_gold -
+        this.value = this.max_gold -
             Math.floor(Math.abs(this.remainingHoldTime) / this.SECONDS_PER_GOLD);
-        if (value < 0)
-            value = 0;
-        this.actionLayer.curCakeValue += value;
+        if (this.value < 0)
+            this.value = 0;
+
+        //this.actionLayer.curCakeValue += value;
     }
 });

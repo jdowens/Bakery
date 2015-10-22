@@ -16,8 +16,8 @@ var SpriteShake = cc.ActionInterval.extend({
     },
 
     update:function(dt) {
-        var randx = (Math.random() - 0.5)*2*this.strengthX;
-        var randy = (Math.random() - 0.5)*2*this.strengthY;
+        var randx = this.initialX + (Math.random() - 0.5)*2*this.strengthX;
+        var randy = this.initialY + (Math.random() - 0.5)*2*this.strengthY;
         this.target.setPosition(cc.p(randx, randy));
     },
 

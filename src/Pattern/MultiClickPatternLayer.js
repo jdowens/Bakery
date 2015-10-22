@@ -1,8 +1,6 @@
 
 var MultiClickPatternLayer = Pattern.extend({
     MAX_CLICKS:2,
-    clickCountRandom:false,
-    patternPositionRandom:false,
     patternSprite:null,
     requiredClicks:0,
     remainingClicks:0,
@@ -11,15 +9,13 @@ var MultiClickPatternLayer = Pattern.extend({
     clickAndDragSelected:false,
     advancesFood:false,
 
-    ctor:function(clickCountRandom, patternPositionRandom, advancesFood, patternSpriteResource, requiredClicks, offsetFromFood) {
+    ctor:function(advancesFood, patternSpriteResource, requiredClicks, offsetFromFood) {
         this._super();
-        this.clickCountRandom = clickCountRandom;
-        this.patternPositionRandom = patternPositionRandom;
         this.advancesFood = advancesFood;
         this.requiredClicks = requiredClicks;
         this.remainingClicks = requiredClicks;
         this.offsetFromFood = offsetFromFood;
-        this.setupClickCount();
+        //this.setupClickCount();
         this.setupPatternSprite(patternSpriteResource);
     },
 
@@ -35,27 +31,19 @@ var MultiClickPatternLayer = Pattern.extend({
         this.addChild(this.patternSprite);
     },
 
-    setupPatternSpritePosition:function() {
-        if (!this.patternPositionRandom) {
-            var foodPos = this.actionLayer.foodSprite.getPosition();
-            var x = foodPos.x + this.offsetFromFood.x;
-            var y = foodPos.y + this.offsetFromFood.y;
-            this.patternSprite.setPosition(cc.p(x,y));
-        }
-        else {
-            var foodSprite = this.actionLayer.foodSprite;
-            this.patternSprite.attr({x:foodSprite.getPosition().x + ((Math.random() - 0.5)*(foodSprite.getTextureRect().width - this.patternSprite.getTextureRect().width)),
-                y:foodSprite.getPosition().y + ((Math.random() - 0.5)*(foodSprite.getTextureRect().height - this.patternSprite.getTextureRect().height))});
-        }
+    setupPatternSpritePosition:function(spritePos) {
+        var x = spritePos.x + this.offsetFromFood.x;
+        var y = spritePos.y + this.offsetFromFood.y;
+        this.patternSprite.setPosition(cc.p(x,y));
     },
 
     setupPatternSpriteOpacities:function() {
         this.patternSprite.setOpacity((this.remainingClicks / this.MAX_CLICKS) * 223 + 32);
     },
 
-    onStart:function(layer) {
-        this._super(layer);
-        this.setupPatternSpritePosition();
+    onStart:function(spritePos) {
+        this._super();
+        this.setupPatternSpritePosition(spritePos);
         this.setupPatternSpriteOpacities();
         if ('mouse' in cc.sys.capabilities) {
             this.setupMouseCallbacks();
@@ -67,7 +55,8 @@ var MultiClickPatternLayer = Pattern.extend({
 
     onFinish:function() {
         this._super();
-        this.actionLayer.curCakeValue += this.requiredClicks*10 + this.missClicks*-10;
+        this.value = this.requiredClicks*10 + this.missClicks*-10;
+        //this.actionLayer.curCakeValue += this.requiredClicks*10 + this.missClicks*-10;
     },
 
     setupMouseCallbacks:function() {
@@ -100,18 +89,19 @@ var MultiClickPatternLayer = Pattern.extend({
         var rect = this.patternSprite.getBoundingBoxToWorld();
         if (cc.rectContainsPoint(rect, point)) {
             this.remainingClicks--;
-            this.actionLayer.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));
+            //this.actionLayer.spriteBatch.runAction(new SpriteShake(0.2, 3, 3));
+            this.onProgress();
             this.setupPatternSpriteOpacities();
             if (this.remainingClicks == 0) {
                 this.finished = true;
             }
-            var sfx_index = Math.floor(Math.random()*3);
+            /*var sfx_index = Math.floor(Math.random()*3);
             if (sfx_index == 0)
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot4.wav", false);
             else if (sfx_index == 1)
                 cc.audioEngine.playEffect("res/SFX/Laser_Shoot6.wav", false);
             else if (sfx_index == 2)
-                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);
+                cc.audioEngine.playEffect("res/SFX/Laser_Shoot9.wav", false);*/
         }
         else {
             //cc.audioEngine.playEffect("res/SFX/Randomize10.wav", false);

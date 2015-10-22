@@ -1,21 +1,44 @@
-/**
- * Created by james on 10/14/2015.
- */
-
 var Pattern = cc.Layer.extend({
     finished:false,
     listener:null,
-    actionLayer:null,
+    onProgressVector:null,
+    onCompletionVector:null,
+    value:0,
 
     ctor:function() {
         this._super();
+        this.onProgressVector = [];
+        this.onCompletionVector = [];
     },
 
-    onStart:function(layer) {
-        this.actionLayer = layer;
+    addOnProgressAction:function(caller, func) {
+        var boundFunc = func.bind(caller);
+        this.onProgressVector.push(boundFunc);
+    },
+
+    addOnCompletionAction:function(caller, func) {
+        var boundFunc = func.bind(caller);
+        this.onCompletionVector.push(boundFunc);
+    },
+
+    onStart:function() {
+
+    },
+
+    onProgress:function() {
+        for (var i = 0; i < this.onProgressVector.length; i++) {
+            this.onProgressVector[i]();
+        }
+    },
+
+    onCompletion:function() {
+        for (var i = 0; i < this.onCompletionVector.length; i++) {
+            this.onCompletionVector[i]();
+        }
     },
 
     onFinish:function() {
+        this.onCompletion();
         if (this.listener !== null)
             cc.eventManager.removeListener(this.listener);
     },
