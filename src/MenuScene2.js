@@ -109,6 +109,7 @@ var MenuLayer2 = cc.Layer.extend({
     onOptions:function(){
         cc.audioEngine.playEffect("res/SFX/Menu/FerchenOven.m4a", false);
         cc.log("You clicked the options button, good job...");
+		cc.log("Extra debug info...");
         cc.director.runScene(new OptionsScene());
     },
 
